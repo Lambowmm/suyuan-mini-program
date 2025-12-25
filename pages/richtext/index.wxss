@@ -1,0 +1,45 @@
+
+page {
+	background: #fafafa;
+}
+
+@charset "UTF-8";
+/* 水平间距 */
+/* 水平间距 */
+/* 文字几行显示省略号 */
+/* flex常用的布局 */
+/* 文字方向 */
+/* 字体大小、颜色 */
+/* before|after 背景图片 */
+.rule.data-v-8deb43f6 {
+  background: #fff;
+  margin: 18rpx;
+  border-radius: 10rpx;
+  min-height: calc(100vh - 36rpx);
+  overflow: hidden;
+}
+.rule > .img1.data-v-8deb43f6 {
+  width: -webkit-max-content;
+  width: max-content;
+  margin: auto;
+  display: block;
+}
+.rule > .img1 > image.data-v-8deb43f6 {
+  position: relative;
+}
+.rule-title.data-v-8deb43f6 {
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 60rpx 0 40rpx 0;
+  color: #000000;
+}
+.rule-content.data-v-8deb43f6 {
+  margin: 0 32rpx;
+}
+.rule-richtext.data-v-8deb43f6 {
+  font-size: 28rpx;
+  line-height: 50rpx;
+  color: #000;
+}
+

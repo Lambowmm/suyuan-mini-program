@@ -1,0 +1,45 @@
+@charset "UTF-8";
+/* 水平间距 */
+/* 水平间距 */
+/* 文字几行显示省略号 */
+/* flex常用的布局 */
+/* 文字方向 */
+/* 字体大小、颜色 */
+/* before|after 背景图片 */
+.report-b.data-v-e403a974 {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.report-i.data-v-e403a974 {
+  width: 50%;
+  height: 185rpx;
+  padding: 0 80rpx;
+  margin: 15rpx 0;
+  border-radius: 93rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+.report-i-t.data-v-e403a974 {
+  display: flex;
+  align-items: flex-end;
+}
+.report-i-t > .t1.data-v-e403a974 {
+  font-size: 36rpx;
+}
+.report-i-t > .t2.data-v-e403a974 {
+  font-size: 42rpx;
+  margin-left: 9rpx;
+  margin-right: 30rpx;
+}
+.report-i.data-v-e403a974:nth-child(1) {
+  background: #5AA7FE;
+}
+.report-i.data-v-e403a974:nth-child(2) {
+  background: #FCA82F;
+}
+

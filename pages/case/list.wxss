@@ -1,0 +1,50 @@
+
+.page.data-v-e62ffd18 {
+	padding: 30rpx
+}
+.index-case.data-v-e62ffd18 {
+	padding: 30rpx 0
+}
+.index-case .t1.data-v-e62ffd18 {
+	font-size: 32rpx;
+	line-height: 50rpx
+}
+.index-case .more.data-v-e62ffd18 {
+	color: #999999;
+	font-size: 26rpx;
+	font-weight: bold;
+	line-height: 50rpx
+}
+.index-case-box.data-v-e62ffd18 {
+	width: 340rpx;
+}
+.index-case-box image.data-v-e62ffd18 {
+	height: 230rpx;
+	width: 100%
+}
+.flex-wrap.data-v-e62ffd18 {
+	flex-wrap: wrap
+}
+.index-case-box .t1.data-v-e62ffd18 {
+	padding: 22rpx 0;
+	height: 40rpx;
+	font-size: 26rpx;
+	font-family: Adobe Heiti Std;
+	font-weight: normal;
+	color: #333333;
+	line-height: 40rpx;
+	overflow: hidden;
+}
+.index-case-box .more.data-v-e62ffd18 {
+	height: 67rpx;
+	border: 1rpx solid #DDDDDD;
+	font-size: 22rpx;
+	color: #999999;
+	line-height: 65rpx;
+	font-family: SourceHanSansCN;
+	font-weight: 400;
+	border-radius: 20rpx;
+	text-align: center;
+	margin-bottom: 40rpx
+}
+

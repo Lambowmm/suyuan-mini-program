@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/query/query",
+    "pages/passWord/passWord",
+    "pages/richtext/index",
+    "pages/aboutUs/aboutUs",
+    "pages/report/report",
+    "pages/reportQuery/reportQuery",
+    "pages/ucenter/mobile",
+    "pages/mine/index",
+    "pages/case/list"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "color": "#333",
+    "selectedColor": "#000",
+    "backgroundColor": "#fff",
+    "position": "bottom",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "./static/images/tab-bar/home.png",
+        "selectedIconPath": "./static/images/tab-bar/home-active.png"
+      },
+      {
+        "pagePath": "pages/report/report",
+        "text": "报告",
+        "iconPath": "./static/images/tab-bar/report.png",
+        "selectedIconPath": "./static/images/tab-bar/report-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "./static/images/tab-bar/mine.png",
+        "selectedIconPath": "./static/images/tab-bar/mine-active.png"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {}
+}
