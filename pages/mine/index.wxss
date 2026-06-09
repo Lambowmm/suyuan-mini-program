@@ -1,0 +1,29 @@
+.blank-page {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #f7fafc;
+}
+
+.blank-mark {
+  width: 72rpx;
+  height: 72rpx;
+  margin-bottom: 24rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #dcefed, #ffffff);
+  border: 1rpx solid #d8e6eb;
+}
+
+.blank-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #17212b;
+}
+
+.blank-subtitle {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #8b97a3;
+}

@@ -1,0 +1,20 @@
+{
+  "rules": [
+    {
+      "action": "allow",
+      "page": "pages/report/index"
+    },
+    {
+      "action": "allow",
+      "page": "pages/report/result"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/index/index"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/mine/index"
+    }
+  ]
+}

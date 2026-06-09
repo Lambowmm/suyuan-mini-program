@@ -1,0 +1,5 @@
+<view class="page-root blank-page">
+  <view class="blank-mark"></view>
+  <view class="blank-title">首页</view>
+  <view class="blank-subtitle">功能暂留</view>
+</view>

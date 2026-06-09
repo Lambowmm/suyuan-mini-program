@@ -1,0 +1,16 @@
+{
+  "pages": [
+    "pages/report/index",
+    "pages/report/result",
+    "pages/index/index",
+    "pages/mine/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "江苏溯源病理",
+    "navigationBarBackgroundColor": "#F7FAFC",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F7FAFC"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

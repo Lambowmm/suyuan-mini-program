@@ -1,0 +1,174 @@
+.report-page {
+  background: #f7fafc;
+}
+
+.hero {
+  padding: 40rpx 8rpx 24rpx;
+}
+
+.hero-kicker {
+  color: #0e7c7b;
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  margin-top: 14rpx;
+  color: #17212b;
+  font-size: 52rpx;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.hero-subtitle {
+  width: 620rpx;
+  max-width: 100%;
+  margin-top: 18rpx;
+  color: #62707f;
+  font-size: 28rpx;
+  line-height: 1.7;
+}
+
+.mode-row {
+  display: flex;
+  margin: 18rpx 0 24rpx;
+}
+
+.mode-item {
+  flex: 1;
+  min-height: 116rpx;
+  padding: 24rpx 26rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid #e1e9ef;
+  background: #ffffff;
+}
+
+.mode-item + .mode-item {
+  margin-left: 20rpx;
+}
+
+.mode-item.active {
+  border-color: #0e7c7b;
+  background: #eef8f7;
+}
+
+.mode-item.disabled {
+  color: #9aa6b2;
+  background: #f4f7f9;
+}
+
+.mode-title {
+  font-size: 31rpx;
+  font-weight: 700;
+}
+
+.mode-desc {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #7a8794;
+}
+
+.form-card {
+  padding: 34rpx 30rpx 32rpx;
+}
+
+.form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.form-title {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #17212b;
+}
+
+.form-subtitle {
+  margin-top: 10rpx;
+  color: #7a8794;
+  font-size: 25rpx;
+}
+
+.status-pill {
+  min-width: 112rpx;
+  padding: 12rpx 18rpx;
+  text-align: center;
+  color: #0e7c7b;
+  font-size: 23rpx;
+  border-radius: 999rpx;
+  background: #e8f5f4;
+}
+
+.field {
+  margin-bottom: 28rpx;
+}
+
+.label {
+  margin-bottom: 14rpx;
+  color: #465466;
+  font-size: 25rpx;
+  font-weight: 600;
+}
+
+.input,
+.date-value {
+  width: 100%;
+  height: 88rpx;
+  padding: 0 24rpx;
+  color: #17212b;
+  font-size: 29rpx;
+  border: 1rpx solid #dce5ec;
+  border-radius: 12rpx;
+  background: #fbfdfe;
+}
+
+.input-placeholder {
+  color: #a2adb8;
+}
+
+.date-grid {
+  display: flex;
+}
+
+.date-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.date-field + .date-field {
+  margin-left: 18rpx;
+}
+
+.date-value {
+  display: flex;
+  align-items: center;
+}
+
+.submit-button {
+  margin-top: 10rpx;
+}
+
+.notice {
+  margin-top: 24rpx;
+  padding: 28rpx 30rpx;
+  border: 1rpx solid #e2edf0;
+  border-radius: 16rpx;
+  background: #ffffff;
+}
+
+.notice-title {
+  color: #17212b;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.notice-text {
+  margin-top: 12rpx;
+  color: #687788;
+  font-size: 25rpx;
+  line-height: 1.7;
+}

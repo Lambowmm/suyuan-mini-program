@@ -1,0 +1,62 @@
+<view class="page-root result-page">
+  <view class="summary-card">
+    <view class="summary-top">
+      <view>
+        <view class="summary-kicker">{{query.reportTitle || '病理报告'}}</view>
+        <view class="summary-title">{{query.summaryName || query.sendHospital}}</view>
+      </view>
+      <view class="summary-count">{{reports.length}} 份</view>
+    </view>
+    <view class="summary-range">{{query.regeditTime}} 至 {{query.regeditEndTime}}</view>
+  </view>
+
+  <view class="search-card">
+    <input
+      class="search-input"
+      value="{{keyword}}"
+      placeholder="按姓名、送检科室或检测类型搜索"
+      placeholder-class="search-placeholder"
+      confirm-type="search"
+      bindinput="onKeywordInput"
+      bindconfirm="onKeywordConfirm"
+    />
+    <button class="search-button" loading="{{loading}}" bindtap="onKeywordConfirm">搜索</button>
+  </view>
+
+  <view class="filter-row" wx:if="{{keyword}}">
+    <view class="filter-text">当前搜索：{{keyword}}</view>
+    <button class="filter-clear" bindtap="clearKeyword">清除</button>
+  </view>
+
+  <view class="loading-line" wx:if="{{loading && !reports.length}}">正在查询报告...</view>
+
+  <view class="report-list" wx:if="{{reports.length}}">
+    <view
+      class="report-item"
+      wx:for="{{reports}}"
+      wx:key="_key"
+    >
+      <view class="report-row">
+        <view class="report-main">
+          <view class="report-icon {{item._typeTag === '免' ? 'immune' : ''}}">{{item._typeTag}}</view>
+          <view class="report-info">
+            <view class="report-name ellipsis">{{item._patientName}}</view>
+            <view class="report-meta ellipsis">{{item._reportType}}</view>
+            <view class="report-date">{{item._date}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="report-action">
+        <view class="previewing" wx:if="{{downloadingId === item.ReportID}}">下载中</view>
+        <view class="download-button" wx:else data-index="{{index}}" bindtap="downloadReport">下载</view>
+        <view class="previewing" wx:if="{{previewingId === item.ReportID}}">打开中</view>
+        <view class="view-button" wx:else data-index="{{index}}" bindtap="openReport">查看</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-card" wx:elif="{{searched && !loading}}">
+    <view class="empty-title">暂无报告</view>
+    <view class="empty-text">请确认医院代码、密码和送检日期范围是否正确。</view>
+  </view>
+</view>

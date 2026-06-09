@@ -1,0 +1,95 @@
+<view class="page-root report-page">
+  <view class="hero">
+    <view class="hero-kicker">Suyuan Report Service</view>
+    <view class="hero-title">病理报告查询</view>
+    <view class="hero-subtitle">输入医院账号信息，即可查询指定送检日期范围内的病理报告。</view>
+  </view>
+
+  <view class="mode-row">
+    <view class="mode-item {{mode === 'pathology' ? 'active' : ''}}" data-mode="pathology" bindtap="setMode">
+      <view class="mode-title">病理</view>
+      <view class="mode-desc">已接入</view>
+    </view>
+    <view class="mode-item disabled" data-mode="lis" bindtap="setMode">
+      <view class="mode-title">检验</view>
+      <view class="mode-desc">待接入</view>
+    </view>
+  </view>
+
+  <view class="card form-card">
+    <view class="form-header">
+      <view>
+        <view class="form-title">医院登录</view>
+      </view>
+      <view class="status-pill">可查询</view>
+    </view>
+
+    <view class="field">
+      <view class="label">送检医院代码</view>
+      <input
+        class="input"
+        value="{{query.sendHospital}}"
+        data-field="sendHospital"
+        placeholder="请输入医院代码"
+        placeholder-class="input-placeholder"
+        confirm-type="next"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="field">
+      <view class="label">医院查询密码</view>
+      <input
+        class="input"
+        value="{{query.password}}"
+        data-field="password"
+        type="password"
+        placeholder="请输入查询密码"
+        placeholder-class="input-placeholder"
+        confirm-type="done"
+        bindinput="onInput"
+      />
+    </view>
+
+    <view class="date-grid">
+      <view class="field date-field">
+        <view class="label">开始日期</view>
+        <picker
+          mode="date"
+          value="{{query.regeditTime}}"
+          end="{{maxDate}}"
+          data-field="regeditTime"
+          bindchange="onDateChange"
+        >
+          <view class="date-value">{{query.regeditTime}}</view>
+        </picker>
+      </view>
+      <view class="field date-field">
+        <view class="label">结束日期</view>
+        <picker
+          mode="date"
+          value="{{query.regeditEndTime}}"
+          end="{{maxDate}}"
+          data-field="regeditEndTime"
+          bindchange="onDateChange"
+        >
+          <view class="date-value">{{query.regeditEndTime}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <button
+      class="primary-button submit-button"
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+      bindtap="submitQuery"
+    >
+      登录并查询
+    </button>
+  </view>
+
+  <view class="notice">
+    <view class="notice-title">查询说明</view>
+    <view class="notice-text">当前版本为测试版本，仅开放医院病理报告查询；检验报告及个人查询请等待后续接入。</view>
+  </view>
+</view>

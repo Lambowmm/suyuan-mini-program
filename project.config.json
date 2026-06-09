@@ -1,0 +1,19 @@
+{
+  "appid": "wx761897028aa3ab19",
+  "projectname": "SYBL-Mini-Program",
+  "compileType": "miniprogram",
+  "libVersion": "latest",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "coverView": true,
+    "lazyloadPlaceholderEnable": false,
+    "preloadBackgroundData": false,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true
+  },
+  "condition": {}
+}
