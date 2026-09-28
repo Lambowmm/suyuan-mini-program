@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "prepare:calendar": "node scripts/prepare-calendar.js",
+    "test": "node --test tests/lis.test.js"
+  },
+  "dependencies": {
+    "tdesign-miniprogram": "1.17.0"
+  }
+}

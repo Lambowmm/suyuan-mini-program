@@ -63,6 +63,9 @@ function request(params) {
 }
 
 function buildReportListParams(query, keyword) {
+  if (query && query.reportKind === 'lis') {
+    throw new Error('检验查询请使用 LIS 令牌请求层');
+  }
   var params = {
     action: 'reportList',
     sendHospital: query.sendHospital,

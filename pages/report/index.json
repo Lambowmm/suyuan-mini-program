@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "报告查询"
+  "navigationBarTitleText": "报告查询",
+  "usingComponents": {
+    "t-calendar": "/components/tdesign/calendar/calendar"
+  }
 }

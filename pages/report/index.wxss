@@ -130,23 +130,16 @@
   color: #a2adb8;
 }
 
-.date-grid {
-  display: flex;
-}
-
-.date-field {
-  flex: 1;
-  min-width: 0;
-}
-
-.date-field + .date-field {
-  margin-left: 18rpx;
-}
-
 .date-value {
   display: flex;
   align-items: center;
+  gap: 12rpx;
+  padding: 0 20rpx;
+  font-size: 25rpx;
 }
+.date-range-text { flex: 1; min-width: 0; white-space: nowrap; }
+.date-range-action { flex: none; color: #0e7c7b; font-size: 24rpx; }
+page { --td-brand-color: #0e7c7b; --td-brand-color-light: #eef8f7; }
 
 .submit-button {
   margin-top: 10rpx;

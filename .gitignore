@@ -6,6 +6,13 @@ Thumbs.db
 .vscode/
 .idea/
 
+# WeChat developer tools: local preferences
+/project.private.config.json
+
+# Test reports and coverage outputs
+/coverage/
+/.nyc_output/
+
 # Logs and temporary files
 *.log
 *.tmp
@@ -14,8 +21,16 @@ Thumbs.db
 # Local secrets
 utils/config.js
 
+# Backend and local documentation
+/background/
+/docs/
+
 # Dependency/build outputs
 node_modules/
 miniprogram_npm/
+
+# Vendored calendar dependencies are required at runtime
+!components/tdesign/miniprogram_npm/
+!components/tdesign/miniprogram_npm/**
 dist/
 build/

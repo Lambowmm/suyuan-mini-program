@@ -1,8 +1,8 @@
 <view class="page-root report-page">
   <view class="hero">
     <view class="hero-kicker">Suyuan Report Service</view>
-    <view class="hero-title">病理报告查询</view>
-    <view class="hero-subtitle">输入医院账号信息，即可查询指定送检日期范围内的病理报告。</view>
+    <view class="hero-title">{{mode === 'lis' ? '检验报告查询' : '病理报告查询'}}</view>
+    <view class="hero-subtitle">输入医院账号信息，即可查询指定日期范围内的报告。</view>
   </view>
 
   <view class="mode-row">
@@ -10,9 +10,9 @@
       <view class="mode-title">病理</view>
       <view class="mode-desc">已接入</view>
     </view>
-    <view class="mode-item disabled" data-mode="lis" bindtap="setMode">
+    <view class="mode-item {{mode === 'lis' ? 'active' : ''}}" data-mode="lis" bindtap="setMode">
       <view class="mode-title">检验</view>
-      <view class="mode-desc">待接入</view>
+      <view class="mode-desc">已接入</view>
     </view>
   </view>
 
@@ -25,20 +25,20 @@
     </view>
 
     <view class="field">
-      <view class="label">送检医院代码</view>
+      <view class="label">{{mode === 'lis' ? '检验账号' : '病理账号'}}</view>
       <input
         class="input"
         value="{{query.sendHospital}}"
         data-field="sendHospital"
-        placeholder="请输入医院代码"
+        placeholder="{{mode === 'lis' ? '请输入检验账号' : '请输入病理账号'}}"
         placeholder-class="input-placeholder"
         confirm-type="next"
         bindinput="onInput"
       />
     </view>
 
-    <view class="field">
-      <view class="label">医院查询密码</view>
+    <view class="field" wx:if="{{mode !== 'lis' || !lisSignedIn}}">
+      <view class="label">查询密码</view>
       <input
         class="input"
         value="{{query.password}}"
@@ -51,30 +51,11 @@
       />
     </view>
 
-    <view class="date-grid">
-      <view class="field date-field">
-        <view class="label">开始日期</view>
-        <picker
-          mode="date"
-          value="{{query.regeditTime}}"
-          end="{{maxDate}}"
-          data-field="regeditTime"
-          bindchange="onDateChange"
-        >
-          <view class="date-value">{{query.regeditTime}}</view>
-        </picker>
-      </view>
-      <view class="field date-field">
-        <view class="label">结束日期</view>
-        <picker
-          mode="date"
-          value="{{query.regeditEndTime}}"
-          end="{{maxDate}}"
-          data-field="regeditEndTime"
-          bindchange="onDateChange"
-        >
-          <view class="date-value">{{query.regeditEndTime}}</view>
-        </picker>
+    <view class="field">
+      <view class="label">报告日期范围</view>
+      <view class="date-value" bindtap="openDateRange" role="button" aria-label="选择报告日期范围">
+        <text class="date-range-text">{{query.regeditTime}} ~ {{query.regeditEndTime}}</text>
+        <text class="date-range-action">选择</text>
       </view>
     </view>
 
@@ -84,12 +65,15 @@
       disabled="{{submitting}}"
       bindtap="submitQuery"
     >
-      登录并查询
+      {{mode === 'lis' && lisSignedIn ? '查询检验报告' : '登录并查询'}}
     </button>
   </view>
 
   <view class="notice">
     <view class="notice-title">查询说明</view>
-    <view class="notice-text">当前版本为测试版本，仅开放医院病理报告查询；检验报告及个人查询请等待后续接入。</view>
+    <view class="notice-text">支持病理和检验报告查询，请按页面提示输入对应账号。</view>
+    <view class="notice-text" wx:if="{{mode === 'lis'}}">登录状态有效时无需重复输入密码；登录失效后需要重新登录。</view>
   </view>
 </view>
+
+<t-calendar wx:if="{{calendarVisible}}" visible="{{calendarVisible}}" type="range" title="选择报告日期范围" value="{{calendarValue}}" min-date="{{calendarMin}}" max-date="{{calendarMax}}" switch-mode="year-month" allow-same-day="{{true}}" auto-close="{{false}}" confirm-btn="确认" bind:confirm="confirmDateRange" bind:close="closeDateRange" />
