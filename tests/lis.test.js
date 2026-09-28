@@ -82,7 +82,8 @@ test('login persists only rotating credentials and absolute expiries; restart re
   reply(h.calls[0], authData());
   await pending;
   const auth = h.storage.lisAuth;
-  assert.deepEqual(Object.keys(auth).sort(), ['refreshExpireAt', 'refreshToken', 'token', 'tokenExpireAt', 'username'].sort());
+  assert.deepEqual(Object.keys(auth).sort(), ['refreshExpireAt', 'refreshToken', 'sessionId', 'token', 'tokenExpireAt', 'username'].sort());
+  assert.ok(auth.sessionId);
   assert.ok(auth.tokenExpireAt >= before + 28800000);
   assert.ok(auth.refreshExpireAt >= before + 2592000000);
   assert.ok(!JSON.stringify(h.storage).includes('transient-password'));
@@ -126,6 +127,19 @@ test('unknown expiry sends request first; late concurrent 401 reuses the already
   assert.equal(h.calls[4].header.Authorization, 'Bearer token-new');
   reply(h.calls[4], {});
   await Promise.all([a, b]);
+});
+
+test('stale request does not retry with another account session after login switch', async () => {
+  const h = authHarness({ lisAuth: storedAuth({ username: 'account-a' }) });
+  const request = h.lis.request('/reports');
+  await tick();
+  const login = h.lis.login('account-b', 'temporary');
+  reply(h.calls[1], Object.assign(authData('account-b'), { username: 'account-b' }));
+  await login;
+  reply(h.calls[0], {}, 401);
+  await assert.rejects(request, error => error.authExpired);
+  assert.equal(h.calls.filter(call => call.url.endsWith('/auth/refresh')).length, 0);
+  assert.equal(h.calls.filter(call => /\/reports(\?|$)/.test(call.url)).length, 1);
 });
 
 test('a second 401 stops retrying and clears authentication', async () => {

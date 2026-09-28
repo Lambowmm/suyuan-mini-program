@@ -53,7 +53,7 @@
 
     <view class="field">
       <view class="label">报告日期范围</view>
-      <view class="date-value" bindtap="openDateRange" role="button" aria-label="选择报告日期范围">
+      <view class="date-value" bindtap="openDateRange" aria-role="button" aria-label="选择报告日期范围">
         <text class="date-range-text">{{query.regeditTime}} ~ {{query.regeditEndTime}}</text>
         <text class="date-range-action">选择</text>
       </view>

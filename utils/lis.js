@@ -3,8 +3,25 @@ const config = require('./config');
 const AUTH_KEY = 'lisAuth';
 const REFRESH_EARLY_MS = 5 * 60 * 1000;
 const LIS_API_HOST = (config.LIS_API_HOST || 'https://www.suyuanbingli.cn/open').replace(/\/$/, '');
+const SESSION_CHANGED_MESSAGE = '检验会话已变更，请重新查询';
 let refreshPromise = null;
 let redirecting = false;
+
+function createSessionId() {
+  return String(Date.now()) + '-' + Math.random().toString(36).slice(2);
+}
+
+function isSameSession(current, previous) {
+  if (!current || !previous) return false;
+  if (current.sessionId && previous.sessionId) return current.sessionId === previous.sessionId;
+  return !!current.username && current.username === previous.username;
+}
+
+function sessionChangedError() {
+  const error = new Error(SESSION_CHANGED_MESSAGE);
+  error.authExpired = true;
+  return error;
+}
 
 function getAuth() {
   return wx.getStorageSync(AUTH_KEY) || null;
@@ -29,6 +46,7 @@ function saveAuth(data, previous) {
     refreshToken: data.refreshToken,
     tokenExpireAt: now + expiresIn * 1000,
     refreshExpireAt: now + refreshExpiresIn * 1000,
+    sessionId: (previous && previous.sessionId) || createSessionId(),
     username: data.username || (previous && previous.username) || ''
   };
   wx.setStorageSync(AUTH_KEY, auth);
@@ -63,7 +81,7 @@ function login(username, password) {
   }
   return rawRequest('/auth/login', 'POST', { username: username, password: password }).then(function(data) {
     redirecting = false;
-    return saveAuth(data, { username: username });
+    return saveAuth(data, { username: username, sessionId: createSessionId() });
   });
 }
 
@@ -110,6 +128,9 @@ function withAuth(operation) {
     return operation(auth.token).catch(function(error) {
       if (error.statusCode !== 401) throw error;
       const current = getAuth();
+      if (current && current.token !== auth.token && !isSameSession(current, auth)) {
+        throw sessionChangedError();
+      }
       const next = current && current.token !== auth.token ? Promise.resolve(current) : refresh();
       return next.then(function(updated) { return operation(updated.token); }).catch(function(retryError) {
         if (retryError.statusCode === 401) return requireLogin();
