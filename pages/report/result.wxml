@@ -5,34 +5,52 @@
         <view class="summary-kicker">{{query.reportTitle || '病理报告'}}</view>
         <view class="summary-title">{{query.summaryName || query.sendHospital}}</view>
       </view>
-      <view class="summary-count">{{reports.length}} 份</view>
+      <view class="summary-count">{{searched ? total : '—'}} 份</view>
     </view>
-    <view class="summary-range">{{query.regeditTime}} 至 {{query.regeditEndTime}}</view>
+    <view class="summary-range-row">
+      <text class="range-text">日期范围：{{startDate}} ~ {{endDate}}</text>
+      <button size="mini" class="edit-range" bindtap="openDateRange">修改</button>
+    </view>
+    <view class="summary-range" wx:if="{{query.reportKind === 'lis' && stats}}">该日期范围：{{stats.total}} 份 · 危急值 {{stats.withDanger}} · 异常 {{stats.withAbnormal}}</view>
   </view>
 
   <view class="search-card">
     <input
       class="search-input"
       value="{{keyword}}"
-      placeholder="按姓名、送检科室或检测类型搜索"
+      placeholder="{{query.reportKind === 'lis' ? '按患者姓名搜索' : '按姓名、送检科室或检测类型搜索'}}"
       placeholder-class="search-placeholder"
       confirm-type="search"
       bindinput="onKeywordInput"
       bindconfirm="onKeywordConfirm"
     />
-    <button class="search-button" loading="{{loading}}" bindtap="onKeywordConfirm">搜索</button>
+    <button size="mini" class="search-button" loading="{{loading}}" bindtap="onKeywordConfirm">搜索</button>
   </view>
 
-  <view class="filter-row" wx:if="{{keyword}}">
-    <view class="filter-text">当前搜索：{{keyword}}</view>
-    <button class="filter-clear" bindtap="clearKeyword">清除</button>
+  <view class="filter-toolbar">
+    <view class="risk-filters">
+      <block wx:if="{{query.reportKind === 'lis'}}">
+        <button size="mini" class="filter-chip {{criticalFilter ? 'selected' : ''}}" data-field="criticalFilter" bindtap="toggleLisFilter">危急值</button>
+        <button size="mini" class="filter-chip {{abnormalFilter ? 'selected' : ''}}" data-field="abnormalFilter" bindtap="toggleLisFilter">异常</button>
+      </block>
+    </view>
+    <view class="display-filters">
+      <picker range="{{pageSizes}}" value="{{pageSizeIndex}}" bindchange="onPageSizeChange"><view class="control-value">每页{{pageSize}}条 ▾</view></picker>
+      <picker range="{{sortOptions}}" value="{{sortIndex}}" bindchange="onSortChange"><view class="control-value">{{sortOptions[sortIndex]}} ▾</view></picker>
+    </view>
   </view>
 
+  <view class="filter-row" wx:if="{{appliedKeyword}}">
+    <view class="filter-text">当前搜索：{{appliedKeyword}}</view>
+    <button size="mini" class="filter-clear" bindtap="clearKeyword">清除</button>
+  </view>
+
+  <view id="report-results"></view>
   <view class="loading-line" wx:if="{{loading && !reports.length}}">正在查询报告...</view>
 
   <view class="report-list" wx:if="{{reports.length}}">
     <view
-      class="report-item"
+      class="report-item {{query.reportKind === 'lis' ? 'lis-report-item' : ''}}"
       wx:for="{{reports}}"
       wx:key="_key"
     >
@@ -43,6 +61,13 @@
             <view class="report-name ellipsis">{{item._patientName}}</view>
             <view class="report-meta ellipsis">{{item._reportType}}</view>
             <view class="report-date">{{item._date}}</view>
+            <view class="report-extra" wx:if="{{query.reportKind === 'lis' && item._barcode}}">条码：{{item._barcode}}</view>
+            <view class="report-extra" wx:if="{{query.reportKind === 'lis' && item.patientPhone}}">电话：{{item.patientPhone}}</view>
+            <view class="report-extra" wx:if="{{query.reportKind === 'lis' && item.idHspOut}}">登记号：{{item.idHspOut}}</view>
+            <view class="risk-row" wx:if="{{query.reportKind === 'lis' && (item.hasDanger || item.hasAbnormal)}}">
+              <view class="risk-badge danger" wx:if="{{item.hasDanger}}">危急值 {{item.dangerCount || ''}}</view>
+              <view class="risk-badge abnormal" wx:if="{{item.hasAbnormal}}">异常 {{item.abnormalCount || ''}}</view>
+            </view>
           </view>
         </view>
       </view>
@@ -55,8 +80,21 @@
     </view>
   </view>
 
-  <view class="empty-card" wx:elif="{{searched && !loading}}">
+  <view class="loading-line" wx:if="{{loadError && !loading}}" bindtap="retryPage">{{loadError}}，点击重试</view>
+  <view class="pagination" wx:if="{{totalPages > 0}}">
+    <button size="mini" class="page-button" disabled="{{loading || currentPage <= 1}}" data-page="{{currentPage - 1}}" bindtap="changePage">上一页</button>
+    <block wx:for="{{paginationItems}}" wx:key="key">
+      <text class="page-gap" wx:if="{{!item.page}}">{{item.label}}</text>
+      <button wx:else size="mini" class="page-button page-number {{currentPage === item.page ? 'active' : ''}}" disabled="{{loading}}" data-page="{{item.page}}" bindtap="changePage">{{item.label}}</button>
+    </block>
+    <button size="mini" class="page-button" disabled="{{loading || currentPage >= totalPages}}" data-page="{{currentPage + 1}}" bindtap="changePage">下一页</button>
+  </view>
+  <view class="page-status" wx:if="{{totalPages > 0}}">第 {{currentPage}} / {{totalPages}} 页 · 共 {{total}} 份</view>
+
+  <view class="empty-card" wx:if="{{searched && !loading && !loadError && !reports.length}}">
     <view class="empty-title">暂无报告</view>
-    <view class="empty-text">请确认医院代码、密码和送检日期范围是否正确。</view>
+    <view class="empty-text">{{query.reportKind === 'lis' ? '请调整日期或筛选条件。' : '请确认医院代码、密码和送检日期范围是否正确。'}}</view>
   </view>
 </view>
+
+<t-calendar wx:if="{{calendarVisible}}" visible="{{calendarVisible}}" type="range" title="选择日期范围" value="{{calendarValue}}" min-date="{{calendarMin}}" max-date="{{calendarMax}}" switch-mode="year-month" allow-same-day="{{true}}" auto-close="{{false}}" confirm-btn="确认" bind:select="onCalendarSelect" bind:confirm="confirmDateRange" bind:close="closeDateRange" />

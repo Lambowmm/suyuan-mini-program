@@ -2,6 +2,7 @@
   background: #f7fafc;
 }
 
+
 .summary-card {
   padding: 34rpx 32rpx;
   color: #ffffff;
@@ -66,7 +67,7 @@
   color: #9aa6b2;
 }
 
-.search-button {
+.result-page button.search-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,7 +85,7 @@
   background: #0e7c7b;
 }
 
-.search-button::after {
+.result-page button.search-button::after {
   border: 0;
 }
 
@@ -102,7 +103,13 @@
   font-size: 25rpx;
 }
 
-.filter-clear {
+.result-page button.filter-clear {
+  flex: none;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0 12rpx;
+  line-height: 2;
   color: #0e7c7b;
   font-size: 25rpx;
 }
@@ -129,6 +136,19 @@
   border-radius: 16rpx;
   background: #ffffff;
 }
+
+.report-extra { margin-top: 7rpx; color: #687788; font-size: 23rpx; overflow-wrap: anywhere; }
+.risk-row { display: flex; flex-wrap: wrap; gap: 8rpx; margin-top: 9rpx; }
+.risk-badge { padding: 4rpx 10rpx; border-radius: 8rpx; font-size: 21rpx; font-weight: 700; }
+.risk-badge.danger { background: #fce8e8; color: #b42318; }
+.risk-badge.abnormal { background: #fff2dc; color: #955c00; }
+.lis-report-item { flex-wrap: wrap; align-items: flex-start; }
+.lis-report-item .report-row { flex-basis: 100%; }
+.lis-report-item .report-main { width: 100%; align-items: flex-start; }
+.lis-report-item .report-action { margin-top: 18rpx; margin-left: auto; }
+.lis-report-item .report-name,
+.lis-report-item .report-meta { max-width: none; }
+.lis-report-item .report-date { white-space: normal; }
 
 .report-row {
   display: flex;
@@ -263,3 +283,32 @@
   font-size: 26rpx;
   line-height: 1.7;
 }
+
+.summary-range-row { display: flex; flex-wrap: nowrap; align-items: center; gap: 12rpx; width: 100%; min-width: 0; margin-top: 24rpx; }
+.range-text { display: block; flex: 1 1 0; min-width: 0; font-size: 23rpx; line-height: 1.5; white-space: nowrap; }
+.result-page button.edit-range { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: auto; min-width: 0; height: 52rpx; padding: 0 14rpx; margin: 0; font-size: 23rpx; line-height: 1; white-space: nowrap; color: #fff; background: rgba(255,255,255,.18); border-radius: 10rpx; }
+.filter-toolbar { display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 8rpx; width: 100%; min-width: 0; margin-top: 20rpx; }
+.risk-filters, .display-filters { display: flex; flex: 0 0 auto; align-items: center; gap: 8rpx; min-width: 0; }
+.display-filters { margin-left: auto; }
+.display-filters picker { display: block; flex: none; width: auto; min-width: 0; }
+.result-page button.filter-chip, .control-value { display: flex; align-items: center; justify-content: center; flex: none; width: auto; min-width: 0; height: 64rpx; padding: 0 14rpx; margin: 0; line-height: 1; color: #465466; font-size: 24rpx; white-space: nowrap; border-radius: 12rpx; background: #fff; }
+.result-page button.filter-chip.selected { color: #fff; background: #0e7c7b; }
+.result-page button.filter-chip::after, .result-page button.edit-range::after, .result-page button.page-button::after { border: 0; }
+.pagination { display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 6rpx; width: 100%; min-width: 0; margin-top: 30rpx; }
+.result-page button.page-button { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 96rpx; min-width: 0; height: 64rpx; margin: 0; padding: 0; font-size: 24rpx; line-height: 1; white-space: nowrap; border-radius: 10rpx; background: #fff; color: #0e7c7b; }
+.result-page button.page-number { width: 64rpx; }
+.result-page button.page-number.active { background: #0e7c7b; color: #fff; }
+.result-page button.page-button[disabled] { opacity: .45; }
+.page-gap, .page-status { color: #7a8794; font-size: 24rpx; }
+.page-gap { flex: none; width: 24rpx; text-align: center; }
+.page-status { text-align: center; padding: 16rpx 0 30rpx; }
+@media (max-width: 340px) {
+  .filter-toolbar { gap: 6rpx; }
+  .risk-filters, .display-filters { gap: 6rpx; }
+  .result-page button.filter-chip, .control-value { padding: 0 10rpx; font-size: 22rpx; }
+  .range-text, .result-page button.edit-range { font-size: 21rpx; }
+  .pagination { gap: 4rpx; }
+  .result-page button.page-button { width: 92rpx; font-size: 22rpx; }
+  .result-page button.page-number { width: 64rpx; }
+}
+page { --td-brand-color: #0e7c7b; --td-brand-color-light: #eef8f7; }

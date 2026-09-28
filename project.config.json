@@ -3,6 +3,90 @@
   "projectname": "SYBL-Mini-Program",
   "compileType": "miniprogram",
   "libVersion": "latest",
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "tests"
+      },
+      {
+        "type": "folder",
+        "value": "scripts"
+      },
+      {
+        "type": "folder",
+        "value": "background"
+      },
+      {
+        "type": "folder",
+        "value": "docs"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules"
+      },
+      {
+        "type": "folder",
+        "value": "coverage"
+      },
+      {
+        "type": "folder",
+        "value": ".nyc_output"
+      },
+      {
+        "type": "folder",
+        "value": "dist"
+      },
+      {
+        "type": "folder",
+        "value": "build"
+      },
+      {
+        "type": "folder",
+        "value": ".git"
+      },
+      {
+        "type": "folder",
+        "value": ".vscode"
+      },
+      {
+        "type": "folder",
+        "value": ".idea"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
+      },
+      {
+        "type": "file",
+        "value": "package.json"
+      },
+      {
+        "type": "file",
+        "value": "package-lock.json"
+      },
+      {
+        "type": "file",
+        "value": "project.private.config.json"
+      },
+      {
+        "type": "file",
+        "value": ".gitignore"
+      },
+      {
+        "type": "file",
+        "value": ".gitattributes"
+      },
+      {
+        "type": "file",
+        "value": ".editorconfig"
+      },
+      {
+        "type": "file",
+        "value": "utils/config.example.js"
+      }
+    ]
+  },
   "setting": {
     "urlCheck": true,
     "es6": true,

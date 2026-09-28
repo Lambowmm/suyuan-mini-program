@@ -1,5 +1,8 @@
 {
   "navigationBarTitleText": "病理报告",
   "enablePullDownRefresh": true,
-  "backgroundTextStyle": "dark"
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "t-calendar": "/components/tdesign/calendar/calendar"
+  }
 }
