@@ -9,13 +9,17 @@
 
   <!-- 购物车列表 -->
   <view class="cart-container" wx:else>
+    <view class="validation-panel validation-{{validationStatus}}">
+      <text class="validation-text">{{validationMessage}}</text>
+      <button class="validation-retry" wx:if="{{validationStatus === 'error'}}" bindtap="retryValidation">重新核验</button>
+    </view>
     <view class="cart-tips" wx:if="{{hasChanges}}">
       <text class="tips-icon">⚠️</text>
       <text class="tips-text">部分商品的价格或准入单位已根据医院最新协议进行自动更新</text>
     </view>
 
     <view class="cart-list">
-      <view class="cart-card" wx:for="{{items}}" wx:key="materialId_unit">
+      <view class="cart-card" wx:for="{{items}}" wx:key="lineKey">
         <view class="card-header">
           <view class="card-title">{{item.materialName}}</view>
           <view class="card-delete" bindtap="removeItem" data-mid="{{item.materialId}}" data-unit="{{item.selectedUnit}}">删除</view>
@@ -52,6 +56,7 @@
         <view class="card-subtotal">
           小计: <text class="subtotal-val">¥{{item.lineAmount}}</text>
         </view>
+        <view class="quota-error" wx:if="{{item.isQuotaExceeded}}">{{item.quotaMessage || '该商品数量超出可用配额'}}</view>
       </view>
     </view>
   </view>
@@ -66,7 +71,9 @@
       <view class="bar-count-sub">共 {{totalQty}} 件商品</view>
     </view>
     <view class="bar-right">
-      <button class="checkout-btn" bindtap="goToCheckout">去提交订单</button>
+      <button class="checkout-btn {{!canCheckout ? 'disabled' : ''}}" disabled="{{!canCheckout}}" bindtap="goToCheckout">
+        {{loading ? '正在核验…' : (hasQuotaExceeded ? '请调整超额数量' : '去提交订单')}}
+      </button>
     </view>
   </view>
 </view>

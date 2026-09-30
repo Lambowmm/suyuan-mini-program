@@ -4,6 +4,14 @@
   min-height: 100vh;
 }
 
+.quote-validation { display: flex; align-items: center; margin: 20rpx; padding: 18rpx 22rpx; border-radius: 12rpx; font-size: 24rpx; background: #eef6ff; color: #175cd3; }
+.quote-validation text { flex: 1; }
+.quote-validation button { margin-left: 16rpx; padding: 0 18rpx; height: 56rpx; line-height: 56rpx; font-size: 24rpx; color: #fff; background: #1677ff; }
+.quote-validation.validation-error { background: #fff1f0; color: #cf1322; }
+.quote-validation.validation-valid { background: #f0fdf4; color: #15803d; }
+.uncertain-banner, .quote-change-tip { margin: 0 20rpx 20rpx; padding: 18rpx 22rpx; border-radius: 12rpx; background: #fff7e6; color: #ad6800; font-size: 24rpx; }
+.quote-change-tip { margin: 16rpx 0 0; }
+
 .card {
   background-color: #ffffff;
   border-radius: 16rpx;

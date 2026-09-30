@@ -394,6 +394,9 @@ test('Mini Program procurement utils: cart operations and formatting work proper
     './sign': { sign: () => 'signed' }
   });
 
+  proc.setToken('test-token');
+  proc.setUserInfo({ userId: 1, customerId: 10, approvalStatus: 'APPROVED' });
+
   // Empty cart initial
   assert.equal(proc.getCart().length, 0);
 

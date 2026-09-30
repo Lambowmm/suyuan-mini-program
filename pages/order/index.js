@@ -26,6 +26,12 @@ Page({
     });
   },
 
+  onProcurementIdentityChanged: function() {
+    this.setData({ materials: [], cartCount: 0, isApproved: false });
+    this.checkAuthAndLoad();
+    this.updateCartCount();
+  },
+
   checkAuthAndLoad: function() {
     var self = this;
     self.setData({ loading: true });
@@ -33,8 +39,7 @@ Page({
     return procurement.request('proc_profile')
       .then(function(res) {
         if (res.status === 1 && res.user) {
-          procurement.setUserInfo(res.user);
-          var user = res.user;
+          var user = procurement.setUserInfo(res.user);
 
           if (user.approvalStatus === 'APPROVED' && user.customerId) {
             self.setData({

@@ -61,7 +61,8 @@ Page({
           var status = user.approvalStatus;
 
           // 审核状态变更实时通知弹窗
-          var lastStatus = wx.getStorageSync('proc_last_approval_status');
+          var approvalStatusKey = procurement.getApprovalStatusKey(user);
+          var lastStatus = approvalStatusKey ? wx.getStorageSync(approvalStatusKey) : '';
           if (lastStatus && lastStatus === 'PENDING' && status === 'APPROVED') {
             wx.showModal({
               title: '采购准入已通过',
@@ -82,7 +83,7 @@ Page({
               confirmText: '知道了'
             });
           }
-          wx.setStorageSync('proc_last_approval_status', status);
+          if (approvalStatusKey) wx.setStorageSync(approvalStatusKey, status);
 
           var noticeDismissed = !!wx.getStorageSync('proc_approved_notice_dismissed_' + user.userId);
           var cardDismissed = !!wx.getStorageSync('proc_approved_card_dismissed_' + user.userId);
@@ -125,6 +126,14 @@ Page({
           });
         }
       });
+  },
+
+  onProcurementIdentityChanged: function() {
+    if (this._noticeTimer) {
+      clearTimeout(this._noticeTimer);
+      this._noticeTimer = null;
+    }
+    this.refreshUserInfo();
   },
 
   doLogin: function() {

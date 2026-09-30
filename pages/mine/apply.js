@@ -198,10 +198,9 @@ Page({
         self.setData({ submitting: false });
 
         if (res.status === 1) {
-          if (res.user) {
-            procurement.setUserInfo(res.user);
-          }
-          wx.setStorageSync('proc_last_approval_status', 'PENDING');
+          var pendingUser = res.user ? procurement.setUserInfo(res.user) : procurement.getUserInfo();
+          var approvalStatusKey = procurement.getApprovalStatusKey(pendingUser);
+          if (approvalStatusKey) wx.setStorageSync(approvalStatusKey, 'PENDING');
 
           wx.showModal({
             title: '准入申请已提交',

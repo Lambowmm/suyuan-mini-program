@@ -51,6 +51,13 @@
   color: #d46b08;
 }
 
+.validation-panel { display: flex; align-items: center; margin: 16rpx 20rpx 0; padding: 16rpx 20rpx; border-radius: 12rpx; font-size: 24rpx; background: #eef6ff; color: #175cd3; }
+.validation-panel.validation-error { background: #fff1f0; color: #cf1322; }
+.validation-panel.validation-valid { background: #f0fdf4; color: #15803d; }
+.validation-text { flex: 1; }
+.validation-retry { margin: 0 0 0 16rpx; padding: 0 20rpx; min-width: 144rpx; height: 56rpx; line-height: 56rpx; font-size: 24rpx; color: #fff; background: #1677ff; }
+.quota-error { margin-top: 12rpx; color: #cf1322; font-size: 22rpx; }
+
 .tips-icon {
   margin-right: 12rpx;
   font-size: 28rpx;
@@ -258,3 +265,5 @@
   height: 76rpx;
   line-height: 76rpx;
 }
+
+.checkout-btn.disabled { background-color: #b6c2d2; color: #fff; }

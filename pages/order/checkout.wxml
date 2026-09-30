@@ -1,4 +1,9 @@
 <view class="checkout-page">
+  <view class="quote-validation validation-{{validationStatus}}">
+    <text>{{validationMessage}}</text>
+    <button wx:if="{{validationStatus === 'error' && items.length > 0}}" bindtap="retryValidation">重新核验</button>
+  </view>
+  <view class="uncertain-banner" wx:if="{{submissionUncertain}}">上次提交结果尚未确认，请重试原订单以查询或完成提交；期间不能修改订单内容。</view>
   <!-- 订单提交成功顶部常驻提醒条 -->
   <view class="order-success-banner" wx:if="{{orderSubmitted}}">
     <text class="banner-success-icon">✅</text>
@@ -13,7 +18,7 @@
   <view class="card address-card">
     <view class="card-title-row">
       <view class="card-title">医院收货信息</view>
-      <view class="switch-addr" wx:if="{{addresses.length > 1 && !orderSubmitted}}" bindtap="showAddressPicker">切换地址</view>
+      <view class="switch-addr" wx:if="{{addresses.length > 1 && !orderSubmitted && !submitting && !submissionUncertain}}" bindtap="showAddressPicker">切换地址</view>
     </view>
 
     <view class="address-body" wx:if="{{selectedAddress}}">
@@ -34,7 +39,7 @@
     <view class="card-title">采购耗材明细 ({{items.length}}项)</view>
 
     <view class="item-list">
-      <view class="item-row" wx:for="{{items}}" wx:key="materialId_unit">
+      <view class="item-row" wx:for="{{items}}" wx:key="lineKey">
         <view class="item-info">
           <view class="item-name">{{item.materialName}}</view>
           <view class="item-spec">{{item.spec ? '规格: ' + item.spec + ' | ' : ''}}单位: {{item.selectedUnit}}</view>
@@ -51,7 +56,7 @@
   <view class="card remarks-card">
     <view class="card-title">订单备注</view>
     <textarea class="remarks-input" placeholder="可填写科室需求、期望配送时间等补充信息 (选填)"
-              value="{{remarks}}" bindinput="onRemarksInput" maxlength="200" disabled="{{orderSubmitted}}" />
+              value="{{remarks}}" bindinput="onRemarksInput" maxlength="200" disabled="{{orderSubmitted || submitting || submissionUncertain}}" />
   </view>
 
   <!-- 结算清单汇总卡片 -->
@@ -83,9 +88,9 @@
     <view class="bar-right">
       <button class="submit-btn {{submitting ? 'btn-submitting' : ''}} {{orderSubmitted ? 'btn-submitted' : ''}}"
               loading="{{submitting}}"
-              disabled="{{submitting || orderSubmitted || !selectedAddress || items.length === 0}}"
+              disabled="{{submitting || validating || orderSubmitted || !selectedAddress || items.length === 0 || !canSubmit}}"
               bindtap="submitOrder">
-        {{orderSubmitted ? '订单已成功提交' : (submitting ? '正在提交订单...' : '立即提交采购订单')}}
+        {{orderSubmitted ? '订单已成功提交' : (submitting ? '正在提交订单...' : (submissionUncertain ? '确认上次提交 / 重试原订单' : (validating ? '正在核验报价…' : '立即提交采购订单')))}}
       </button>
     </view>
   </view>
@@ -129,7 +134,7 @@
             <text class="cmodal-item-count">({{items.length}} 种耗材 · 共 {{totalQty}} 件)</text>
           </view>
           <view class="cmodal-materials-list">
-            <view class="cmodal-material-item" wx:for="{{items}}" wx:key="materialId_unit">
+            <view class="cmodal-material-item" wx:for="{{items}}" wx:key="lineKey">
               <view class="cmodal-mat-info">
                 <text class="cmodal-mat-name">{{item.materialName}}</text>
                 <text class="cmodal-mat-spec">{{item.spec ? item.spec + ' · ' : ''}}{{item.selectedQty}} {{item.selectedUnit}}</text>
@@ -159,6 +164,7 @@
           <text class="cmodal-tip-icon">💡</text>
           <text class="cmodal-tip-text">请仔细核对以上采购信息，确认无误后将正式提交订单并通知物流仓库配货。</text>
         </view>
+        <view class="quote-change-tip" wx:if="{{quoteChanged}}">本次核验发现价格、单位换算或清单内容有变化，请按当前显示内容重新确认。</view>
       </scroll-view>
 
       <!-- 弹窗底部操作按钮 -->
