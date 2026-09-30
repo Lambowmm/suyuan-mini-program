@@ -1,0 +1,72 @@
+<view class="cart-page">
+  <!-- 空状态 -->
+  <view class="empty-wrap" wx:if="{{items.length === 0}}">
+    <view class="empty-icon">🛒</view>
+    <view class="empty-text">您的订购清单还是空的</view>
+    <view class="empty-sub">请在耗材目录中选购医院准入的检验病理耗材</view>
+    <button class="empty-btn" bindtap="goToCatalog">前往采购目录</button>
+  </view>
+
+  <!-- 购物车列表 -->
+  <view class="cart-container" wx:else>
+    <view class="cart-tips" wx:if="{{hasChanges}}">
+      <text class="tips-icon">⚠️</text>
+      <text class="tips-text">部分商品的价格或准入单位已根据医院最新协议进行自动更新</text>
+    </view>
+
+    <view class="cart-list">
+      <view class="cart-card" wx:for="{{items}}" wx:key="materialId_unit">
+        <view class="card-header">
+          <view class="card-title">{{item.materialName}}</view>
+          <view class="card-delete" bindtap="removeItem" data-mid="{{item.materialId}}" data-unit="{{item.selectedUnit}}">删除</view>
+        </view>
+
+        <view class="card-meta">
+          <text>编码: {{item.materialCode}}</text>
+          <text wx:if="{{item.spec}}"> | 规格: {{item.spec}}</text>
+        </view>
+
+        <view class="card-unit-info">
+          <text class="unit-tag">订购单位: {{item.selectedUnit}}</text>
+          <text class="rule-tag" wx:if="{{item.ruleDescription}}">{{item.ruleDescription}}</text>
+        </view>
+
+        <view class="card-footer">
+          <view class="card-price">
+            <text class="price-val">¥{{item.packageUnitPrice}}</text>
+            <text class="price-unit"> / {{item.selectedUnit}}</text>
+          </view>
+
+          <!-- 数量步进器 -->
+          <view class="stepper">
+            <view class="stepper-btn {{item.selectedQty <= 1 ? 'disabled' : ''}}"
+                  bindtap="decreaseQty" data-mid="{{item.materialId}}" data-unit="{{item.selectedUnit}}">-</view>
+            <input class="stepper-input" type="number" value="{{item.selectedQty}}"
+                   bindblur="onQtyBlur" bindconfirm="onQtyBlur"
+                   data-mid="{{item.materialId}}" data-unit="{{item.selectedUnit}}" />
+            <view class="stepper-btn"
+                  bindtap="increaseQty" data-mid="{{item.materialId}}" data-unit="{{item.selectedUnit}}">+</view>
+          </view>
+        </view>
+
+        <view class="card-subtotal">
+          小计: <text class="subtotal-val">¥{{item.lineAmount}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部结算栏 -->
+  <view class="bottom-bar" wx:if="{{items.length > 0}}">
+    <view class="bar-left">
+      <view class="bar-total-row">
+        <text class="total-label">合计金额:</text>
+        <text class="total-amount">¥{{totalAmount}}</text>
+      </view>
+      <view class="bar-count-sub">共 {{totalQty}} 件商品</view>
+    </view>
+    <view class="bar-right">
+      <button class="checkout-btn" bindtap="goToCheckout">去提交订单</button>
+    </view>
+  </view>
+</view>

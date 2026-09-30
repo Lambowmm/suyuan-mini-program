@@ -1,5 +1,185 @@
-<view class="page-root blank-page">
-  <view class="blank-mark"></view>
-  <view class="blank-title">我的</view>
-  <view class="blank-subtitle">功能暂留</view>
+<view class="mine-page">
+  <!-- 用户信息头部卡片 -->
+  <view class="user-card">
+    <view class="user-header">
+      <!-- 微信官方头像选择器组件 / 未登录默认头像 -->
+      <button class="avatar-wrap avatar-btn-picker" wx:if="{{isLoggedIn}}" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar" hover-class="none">
+        <image class="avatar-img" src="{{user.avatarUrl || defaultAvatarUrl}}" mode="aspectFill" />
+        <view class="avatar-tag">微信头像</view>
+      </button>
+      <view class="avatar-wrap" wx:else>
+        <image class="avatar-img" src="{{defaultAvatarUrl}}" mode="aspectFill" />
+      </view>
+
+      <view class="user-info" wx:if="{{isLoggedIn}}">
+        <view class="user-name">{{user.realName || '微信采购用户'}}</view>
+        <view class="user-phone {{user.phone ? 'phone-bound' : 'phone-unbound'}}">
+          <text wx:if="{{user.phone}}">已绑定手机号</text>
+          <text wx:else>未绑定手机号</text>
+        </view>
+        <view class="user-hospital" wx:if="{{user.customerName}}">{{user.customerName}}</view>
+      </view>
+      <view class="user-info" wx:else>
+        <view class="user-name">未登录</view>
+        <view class="user-phone">点击右侧按钮一键授权登录</view>
+      </view>
+
+      <view class="header-action">
+        <button class="login-btn" wx:if="{{!isLoggedIn}}" bindtap="doLogin">微信登录</button>
+        <view class="status-pill status-{{user.approvalStatus}}" wx:elif="{{user}}">
+          {{statusText}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 微信手机号授权一键绑定 (仅已登录且未绑定手机号时显示；绑定后此按钮立即消失) -->
+    <view class="bind-phone-row" wx:if="{{isLoggedIn && !user.phone}}">
+      <button class="wx-phone-btn" open-type="getPhoneNumber" bindgetphonenumber="onGetPhoneNumber">
+        <text class="phone-btn-icon">📱</text>
+        <text>一键绑定微信手机号</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 审核状态实时通知横幅 -->
+  <view class="audit-notice-bar audit-notice-pending" wx:if="{{isLoggedIn && user.approvalStatus === 'PENDING'}}">
+    <text class="audit-notice-icon">📢</text>
+    <view class="audit-notice-text">
+      <view class="audit-notice-title">准入申请审核中</view>
+      <view class="audit-notice-sub">申请医院：{{user.applyHospitalName || '已提交申请'}}，管理员正在审核开通耗材准入权限，无需重复提交。</view>
+    </view>
+  </view>
+  <view class="audit-notice-bar audit-notice-approved" wx:elif="{{isLoggedIn && user.approvalStatus === 'APPROVED' && !approvedNoticeDismissed}}">
+    <text class="audit-notice-icon">✅</text>
+    <view class="audit-notice-text">
+      <view class="audit-notice-title">采购准入已通过</view>
+      <view class="audit-notice-sub">已获得【{{user.customerName}}】采购授权，协议价格与下单权限已就绪。</view>
+    </view>
+    <view class="notice-dismiss-btn" catchtap="dismissApprovedNotice">✕</view>
+  </view>
+  <view class="audit-notice-bar audit-notice-rejected" wx:elif="{{isLoggedIn && user.approvalStatus === 'REJECTED'}}">
+    <text class="audit-notice-icon">❌</text>
+    <view class="audit-notice-text">
+      <view class="audit-notice-title">准入申请被驳回</view>
+      <view class="audit-notice-sub">原因：{{user.rejectReason || '未提供具体原因'}}，请核实信息后重新提交。</view>
+    </view>
+  </view>
+
+  <!-- 资质准入状态卡片 (认证完成后若已读或关闭则不常驻展示，可在下方【准入申请/资质认证】中随时查看) -->
+  <view class="access-card" wx:if="{{isLoggedIn && (user.approvalStatus !== 'APPROVED' || !approvedCardDismissed)}}">
+    <view class="access-title-row">
+      <view class="access-title">医院耗材采购准入资质</view>
+      <view class="access-title-right">
+        <view class="access-status-badge badge-{{user.approvalStatus}}">{{statusText}}</view>
+        <view class="card-close-btn" wx:if="{{user.approvalStatus === 'APPROVED'}}" catchtap="dismissApprovedCard">已读收起 ✕</view>
+      </view>
+    </view>
+
+    <!-- 已通过审核 -->
+    <view class="access-body" wx:if="{{user.approvalStatus === 'APPROVED'}}">
+      <view class="access-item">
+        <text class="label">准入合作医院：</text>
+        <text class="val font-highlight">{{user.customerName}}</text>
+      </view>
+      <view class="access-item">
+        <text class="label">认证采购员：</text>
+        <text class="val">{{user.realName}} ({{user.department || '耗材采购'}})</text>
+      </view>
+      <view class="access-item" wx:if="{{user.phone}}">
+        <text class="label">绑定手机号：</text>
+        <text class="val">{{user.phone}}</text>
+      </view>
+      <view class="access-tips">您已获得医院授权，可在线查阅准入耗材目录、下达订购单并核对月度结算账单。</view>
+      <view class="access-more-hint" bindtap="goToApply">
+        <text>完整资质已收录至【准入申请/资质认证】</text>
+        <text class="hint-arrow">查看详情 ›</text>
+      </view>
+    </view>
+
+    <!-- 审核中状态 (禁止重复申请) -->
+    <view class="access-body" wx:elif="{{user.approvalStatus === 'PENDING'}}">
+      <view class="pending-notice">
+        <text class="notice-title">准入申请审核中</text>
+        <text class="notice-desc">申请医院：{{user.applyHospitalName || '已提交申请'}}\n经办人：{{user.realName}} ({{user.department || '科室经办'}})\n联系电话：{{user.phone}}\n请耐心等待管理员审核开通耗材准入权限，无需重复提交申请。</text>
+      </view>
+      <button class="pending-btn" disabled="true">申请审核中 (无需重复提交)</button>
+    </view>
+
+    <!-- 驳回状态 -->
+    <view class="access-body" wx:elif="{{user.approvalStatus === 'REJECTED'}}">
+      <view class="reject-notice">
+        <text class="notice-title">准入申请已被驳回</text>
+        <text class="notice-desc">驳回原因：{{user.rejectReason || '未提供具体原因'}}\n请核实申请信息与所属医院信息后重新提交。</text>
+      </view>
+      <button class="apply-btn" bindtap="goToApply">重新提交准入申请</button>
+    </view>
+
+    <!-- 停用状态 -->
+    <view class="access-body" wx:elif="{{user.approvalStatus === 'DISABLED'}}">
+      <view class="reject-notice">
+        <text class="notice-title">采购权限已停用</text>
+        <text class="notice-desc">该医院采购员账号或所属医院客户已被管理员停用，如有疑问请联系管理员。</text>
+      </view>
+    </view>
+
+    <!-- 尚未申请状态 -->
+    <view class="access-body" wx:else>
+      <view class="unapplied-notice">
+        <text class="notice-title">尚未申请医院采购资质</text>
+        <text class="notice-desc">耗材采购受资质准入保护，请绑定微信手机号并提交您所在的合作医院与科室信息。</text>
+      </view>
+      <button class="apply-btn" bindtap="goToApply">立即申请采购准入</button>
+    </view>
+  </view>
+
+  <!-- 采购核心业务功能导航 -->
+  <view class="menu-group">
+    <view class="menu-item" bindtap="goToOrderList">
+      <view class="menu-left">
+        <text class="menu-icon">📋</text>
+        <text class="menu-title">我的采购订单</text>
+      </view>
+      <view class="menu-arrow"></view>
+    </view>
+
+    <view class="menu-item" bindtap="goToCart">
+      <view class="menu-left">
+        <text class="menu-icon">🛒</text>
+        <text class="menu-title">订购清单 (购物车)</text>
+      </view>
+      <view class="menu-arrow"></view>
+    </view>
+
+    <view class="menu-item" bindtap="goToSettlement">
+      <view class="menu-left">
+        <text class="menu-icon">📑</text>
+        <text class="menu-title">医院月度对账结算单</text>
+      </view>
+      <view class="menu-arrow"></view>
+    </view>
+
+    <view class="menu-item" bindtap="goToApply" wx:if="{{isLoggedIn}}">
+      <view class="menu-left">
+        <text class="menu-icon">📝</text>
+        <text class="menu-title">准入申请 / 资质认证</text>
+      </view>
+      <view class="menu-arrow"></view>
+    </view>
+  </view>
+
+  <!-- 其他服务 -->
+  <view class="menu-group">
+    <view class="menu-item" bindtap="goToReport">
+      <view class="menu-left">
+        <text class="menu-icon">🔬</text>
+        <text class="menu-title">检验/病理报告单查询</text>
+      </view>
+      <view class="menu-arrow"></view>
+    </view>
+  </view>
+
+  <!-- 退出登录按钮 -->
+  <view class="logout-wrap" wx:if="{{isLoggedIn}}">
+    <button class="logout-btn" bindtap="doLogout">退出登录</button>
+  </view>
 </view>

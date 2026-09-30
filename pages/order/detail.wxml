@@ -1,0 +1,89 @@
+<view class="detail-page" wx:if="{{detail}}">
+  <!-- 基本信息卡片 -->
+  <view class="detail-card">
+    <view class="detail-name">{{detail.materialName}}</view>
+    <view class="detail-code">耗材编码：{{detail.materialCode}}</view>
+
+    <view class="info-list">
+      <view class="info-item">
+        <text class="info-label">规格型号：</text>
+        <text class="info-val">{{detail.spec || '-'}} / {{detail.model || '-'}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">生产厂商：</text>
+        <text class="info-val">{{detail.manufacturer || '-'}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">凭证号：</text>
+        <text class="info-val">{{detail.registrationCertNo || '-'}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">包装说明：</text>
+        <text class="info-val">{{detail.packageDesc || '-'}}</text>
+      </view>
+      <view class="info-item" wx:if="{{detail.storageCondition}}">
+        <text class="info-label">储运要求：</text>
+        <text class="info-val">{{detail.storageCondition}}</text>
+      </view>
+      <view class="info-item" wx:if="{{detail.validPeriod}}">
+        <text class="info-label">有效期：</text>
+        <text class="info-val">{{detail.validPeriod}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">参考单价：</text>
+        <text class="info-val">¥{{detail.referencePrice}} / {{detail.baseUnit}} (基本单位参考销售价)</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 医院准入订购单位与协议价格 -->
+  <view class="detail-card">
+    <view class="section-title">医院协议订购单位与单价</view>
+    <view class="unit-list">
+      <view class="unit-row {{selectedUnitIndex === index ? 'selected' : ''}}"
+            wx:for="{{detail.units}}" wx:key="unitName" bindtap="selectUnit" data-index="{{index}}">
+        <view class="unit-left">
+          <view class="unit-main-name">{{item.unitName}}</view>
+          <view class="unit-sub-desc">{{item.conversionChain}}</view>
+          <view class="unit-rule-desc" wx:if="{{item.ruleDescription}}">{{item.ruleDescription}}</view>
+        </view>
+        <view class="unit-right">
+          <view class="unit-price">¥{{item.packageUnitPrice}}</view>
+          <view class="unit-check">{{selectedUnitIndex === index ? '已选' : '选择'}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 资质文件与说明书 -->
+  <view class="detail-card">
+    <view class="section-title">产品资质与说明书 (受保护附件)</view>
+    <view class="file-list">
+      <view class="file-empty" wx:if="{{detail.files.length === 0}}">该耗材暂无上传资质证件附件</view>
+      <view class="file-item" wx:for="{{detail.files}}" wx:key="id" bindtap="openFile" data-file="{{item}}">
+        <view class="file-icon-wrap">
+          <text class="file-type-badge">{{item.fileType === 'REG_CERT' ? '注册证' : item.fileType === 'PHOTO' ? '图片' : '说明书'}}</text>
+        </view>
+        <view class="file-info">
+          <view class="file-name">{{item.fileName}}</view>
+          <view class="file-meta">{{item.fileExtension}} 文件 | 点击安全预览 / 打开</view>
+        </view>
+        <view class="file-arrow"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部固定加入购物车操作栏 -->
+  <view class="detail-bar">
+    <view class="bar-left" bindtap="goToCart">
+      <view class="bar-cart-icon-wrap">
+        <text class="bar-cart-icon">🛒</text>
+        <text class="bar-badge" wx:if="{{cartCount > 0}}">{{cartCount}}</text>
+      </view>
+      <text class="bar-text">清单</text>
+    </view>
+    <view class="bar-right">
+      <button class="bar-btn-add" bindtap="addToCart">加入订购清单</button>
+    </view>
+  </view>
+</view>

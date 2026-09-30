@@ -1,0 +1,222 @@
+<view class="checkout-page">
+  <!-- 订单提交成功顶部常驻提醒条 -->
+  <view class="order-success-banner" wx:if="{{orderSubmitted}}">
+    <text class="banner-success-icon">✅</text>
+    <view class="banner-success-text">
+      <view class="banner-success-title">订单提交成功！</view>
+      <view class="banner-success-sub">订单号：{{submittedOrderNo}} | 等待后台接单配货</view>
+    </view>
+    <button class="banner-success-btn" bindtap="goToOrderList">查看订单</button>
+  </view>
+
+  <!-- 收货地址卡片 -->
+  <view class="card address-card">
+    <view class="card-title-row">
+      <view class="card-title">医院收货信息</view>
+      <view class="switch-addr" wx:if="{{addresses.length > 1 && !orderSubmitted}}" bindtap="showAddressPicker">切换地址</view>
+    </view>
+
+    <view class="address-body" wx:if="{{selectedAddress}}">
+      <view class="addr-person">
+        <text class="addr-name">{{selectedAddress.recipientName}}</text>
+        <text class="addr-phone">{{selectedAddress.recipientPhone}}</text>
+        <text class="default-badge" wx:if="{{selectedAddress.isDefault}}">默认</text>
+      </view>
+      <view class="addr-detail">{{selectedAddress.fullAddress}}</view>
+    </view>
+    <view class="address-empty" wx:else>
+      <text>暂无可用收货地址，请联系后台管理员为您所属医院配置收货科室与地址</text>
+    </view>
+  </view>
+
+  <!-- 采购清单明细 -->
+  <view class="card items-card">
+    <view class="card-title">采购耗材明细 ({{items.length}}项)</view>
+
+    <view class="item-list">
+      <view class="item-row" wx:for="{{items}}" wx:key="materialId_unit">
+        <view class="item-info">
+          <view class="item-name">{{item.materialName}}</view>
+          <view class="item-spec">{{item.spec ? '规格: ' + item.spec + ' | ' : ''}}单位: {{item.selectedUnit}}</view>
+          <view class="item-price">¥{{item.packageUnitPrice}} × {{item.selectedQty}} {{item.selectedUnit}}</view>
+        </view>
+        <view class="item-total">
+          <view class="line-amount">¥{{item.lineAmount}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订单备注 -->
+  <view class="card remarks-card">
+    <view class="card-title">订单备注</view>
+    <textarea class="remarks-input" placeholder="可填写科室需求、期望配送时间等补充信息 (选填)"
+              value="{{remarks}}" bindinput="onRemarksInput" maxlength="200" disabled="{{orderSubmitted}}" />
+  </view>
+
+  <!-- 结算清单汇总卡片 -->
+  <view class="card summary-card">
+    <view class="summary-row">
+      <text class="summary-label">耗材总数</text>
+      <text class="summary-val">{{totalQty}} 件</text>
+    </view>
+    <view class="summary-row">
+      <text class="summary-label">配送方式</text>
+      <text class="summary-val">专人专车/配送员院内配送</text>
+    </view>
+    <view class="summary-row">
+      <text class="summary-label">结算方式</text>
+      <text class="summary-val">医院月度对账结算</text>
+    </view>
+    <view class="summary-row total-row">
+      <text class="summary-label font-bold">订单总额</text>
+      <text class="summary-val total-price">¥{{totalAmount}}</text>
+    </view>
+  </view>
+
+  <!-- 底部提交栏 -->
+  <view class="bottom-bar">
+    <view class="bar-left">
+      <text class="bar-label">应付总计:</text>
+      <text class="bar-price">¥{{totalAmount}}</text>
+    </view>
+    <view class="bar-right">
+      <button class="submit-btn {{submitting ? 'btn-submitting' : ''}} {{orderSubmitted ? 'btn-submitted' : ''}}"
+              loading="{{submitting}}"
+              disabled="{{submitting || orderSubmitted || !selectedAddress || items.length === 0}}"
+              bindtap="submitOrder">
+        {{orderSubmitted ? '订单已成功提交' : (submitting ? '正在提交订单...' : '立即提交采购订单')}}
+      </button>
+    </view>
+  </view>
+
+  <!-- ============================================== -->
+  <!-- 优质排版：采购订单提交确认弹窗 -->
+  <!-- ============================================== -->
+  <view class="custom-modal-mask" wx:if="{{showConfirmModal}}" catchtouchmove="preventTouchMove">
+    <view class="custom-modal-box">
+      <!-- 弹窗标题栏 -->
+      <view class="cmodal-header">
+        <view class="cmodal-title-left">
+          <text class="cmodal-badge-icon">📋</text>
+          <text class="cmodal-title">确认提交采购订单？</text>
+        </view>
+        <view class="cmodal-close" bindtap="closeConfirmModal">✕</view>
+      </view>
+
+      <!-- 弹窗主体内容滚动区 -->
+      <scroll-view class="cmodal-scroll-body" scroll-y="true">
+        <!-- 收货信息板块 -->
+        <view class="cmodal-card-block">
+          <view class="cmodal-block-label">
+            <text class="cmodal-icon-small">📍</text>
+            <text class="cmodal-label-text">收货地址</text>
+          </view>
+          <view class="cmodal-addr-content">
+            <view class="cmodal-person-line">
+              <text class="cmodal-person-name">{{selectedAddress.recipientName}}</text>
+              <text class="cmodal-person-phone">({{selectedAddress.recipientPhone}})</text>
+            </view>
+            <view class="cmodal-addr-text">{{selectedAddress.fullAddress}}</view>
+          </view>
+        </view>
+
+        <!-- 订购耗材清单板块 -->
+        <view class="cmodal-card-block">
+          <view class="cmodal-block-label">
+            <text class="cmodal-icon-small">📦</text>
+            <text class="cmodal-label-text">订购耗材</text>
+            <text class="cmodal-item-count">({{items.length}} 种耗材 · 共 {{totalQty}} 件)</text>
+          </view>
+          <view class="cmodal-materials-list">
+            <view class="cmodal-material-item" wx:for="{{items}}" wx:key="materialId_unit">
+              <view class="cmodal-mat-info">
+                <text class="cmodal-mat-name">{{item.materialName}}</text>
+                <text class="cmodal-mat-spec">{{item.spec ? item.spec + ' · ' : ''}}{{item.selectedQty}} {{item.selectedUnit}}</text>
+              </view>
+              <view class="cmodal-mat-price">¥{{item.lineAmount}}</view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 结算与金额汇总板块 -->
+        <view class="cmodal-card-block cmodal-summary-block">
+          <view class="cmodal-info-row">
+            <text class="cmodal-row-key">结算方式</text>
+            <text class="cmodal-settle-tag">医院月度对账结算</text>
+          </view>
+          <view class="cmodal-info-row cmodal-total-line">
+            <text class="cmodal-row-key highlight">订单总额</text>
+            <view class="cmodal-price-wrap">
+              <text class="cmodal-currency">¥</text>
+              <text class="cmodal-amount-number">{{totalAmount}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 审核与确认提示 -->
+        <view class="cmodal-guide-tip">
+          <text class="cmodal-tip-icon">💡</text>
+          <text class="cmodal-tip-text">请仔细核对以上采购信息，确认无误后将正式提交订单并通知物流仓库配货。</text>
+        </view>
+      </scroll-view>
+
+      <!-- 弹窗底部操作按钮 -->
+      <view class="cmodal-btn-row">
+        <button class="cmodal-action-btn cmodal-btn-cancel" bindtap="closeConfirmModal" disabled="{{submitting}}">
+          再核对下
+        </button>
+        <button class="cmodal-action-btn cmodal-btn-confirm" bindtap="executeSubmit" loading="{{submitting}}" disabled="{{submitting}}">
+          {{submitting ? '提交中...' : '确认提交'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- ============================================== -->
+  <!-- 优质排版：采购订单提交成功反馈弹窗 -->
+  <!-- ============================================== -->
+  <view class="custom-modal-mask" wx:if="{{showSuccessModal}}" catchtouchmove="preventTouchMove">
+    <view class="custom-modal-box success-modal-box">
+      <!-- 成功图标与主标题 -->
+      <view class="cmodal-success-banner">
+        <view class="cmodal-success-icon-wrap">✓</view>
+        <view class="cmodal-success-title">采购订单提交成功！</view>
+        <view class="cmodal-success-sub">订单已正式进入系统，等待仓库审核配货</view>
+      </view>
+
+      <!-- 订单详情指标卡 -->
+      <view class="cmodal-success-details">
+        <view class="cmodal-success-row">
+          <text class="cmodal-s-label">订单编号</text>
+          <view class="cmodal-s-val-group">
+            <text class="cmodal-s-val s-order-no">{{submittedOrderNo}}</text>
+            <text class="cmodal-copy-btn" bindtap="copyOrderNo">复制</text>
+          </view>
+        </view>
+        <view class="cmodal-success-row">
+          <text class="cmodal-s-label">订单金额</text>
+          <text class="cmodal-s-val s-price">¥{{submittedAmount}}</text>
+        </view>
+        <view class="cmodal-success-row">
+          <text class="cmodal-s-label">结算方式</text>
+          <text class="cmodal-s-val">医院月度对账结算</text>
+        </view>
+        <view class="cmodal-success-row">
+          <text class="cmodal-s-label">当前进度</text>
+          <text class="cmodal-s-val s-status-pill">已下单 · 待接单</text>
+        </view>
+      </view>
+
+      <!-- 成功弹窗按钮栏 -->
+      <view class="cmodal-btn-row">
+        <button class="cmodal-action-btn cmodal-btn-secondary" bindtap="goToCatalog">
+          返回选购
+        </button>
+        <button class="cmodal-action-btn cmodal-btn-primary" bindtap="goToOrderList">
+          查看我的订单
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

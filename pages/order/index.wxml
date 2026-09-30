@@ -1,0 +1,151 @@
+<view class="catalog-page">
+  <!-- 未准入 / 未审核提示卡片 -->
+  <view class="auth-notice-card" wx:if="{{!isApproved}}">
+    <view class="notice-icon"></view>
+    <view class="notice-title">{{authNoticeTitle}}</view>
+    <view class="notice-desc">{{authNoticeDesc}}</view>
+    <button class="notice-btn" bindtap="goToApply">{{authNoticeBtnText}}</button>
+  </view>
+
+  <!-- 准入用户耗材目录展示 -->
+  <view wx:if="{{isApproved}}">
+    <!-- 头部搜索与医院徽标 -->
+    <view class="catalog-header">
+      <view class="hospital-badge">
+        <text class="badge-icon">🏥</text>
+        <text class="badge-name">{{hospitalName}}</text>
+      </view>
+      <view class="header-links">
+        <view class="header-link" bindtap="goToOrderList">我的订单</view>
+      </view>
+    </view>
+
+    <!-- 搜索栏 -->
+    <view class="search-box">
+      <input class="search-input" placeholder="搜索耗材名称 / 编码 / 规格" value="{{keyword}}" bindinput="onSearchInput" bindconfirm="onSearchConfirm" />
+      <view class="search-btn" bindtap="onSearchConfirm">搜索</view>
+    </view>
+
+    <!-- 主体区域：左侧分类纵向竖列 + 右侧耗材列表 -->
+    <view class="catalog-body">
+      <!-- 左侧分类竖列 (一竖列) -->
+      <scroll-view class="category-sidebar" scroll-y="true" enable-flex="true" show-scrollbar="false" wx:if="{{categories.length > 0}}">
+        <view class="side-tab-item {{selectedCategory === '' ? 'active' : ''}}" bindtap="onSelectCategory" data-cat="">全部</view>
+        <view class="side-tab-item {{selectedCategory === cat ? 'active' : ''}}"
+              wx:for="{{categories}}" wx:key="*this" wx:for-item="cat"
+              bindtap="onSelectCategory" data-cat="{{cat}}">
+          {{cat}}
+        </view>
+      </scroll-view>
+
+      <!-- 耗材列表 -->
+      <view class="material-list">
+        <view class="material-card" wx:for="{{materials}}" wx:key="id">
+        <view class="card-head" bindtap="goToDetail" data-id="{{item.id}}">
+          <view class="head-left">
+            <view class="mat-name">{{item.materialName}}</view>
+            <view class="mat-code">{{item.materialCode}}</view>
+          </view>
+          <view class="mat-category-tag" wx:if="{{item.categoryName}}">{{item.categoryName}}</view>
+        </view>
+
+        <view class="card-meta">
+          <view class="meta-row">
+            <text class="meta-label">规格/型号：</text>
+            <text class="meta-val">{{item.spec || '-'}} / {{item.model || '-'}}</text>
+          </view>
+          <view class="meta-row">
+            <text class="meta-label">生产厂商：</text>
+            <text class="meta-val">{{item.manufacturer || '-'}}</text>
+          </view>
+          <view class="meta-row" wx:if="{{item.packageDesc}}">
+            <text class="meta-label">包装说明：</text>
+            <text class="meta-val">{{item.packageDesc}}</text>
+          </view>
+          <view class="meta-row" wx:if="{{item.storageCondition}}">
+            <text class="meta-label">储运要求：</text>
+            <text class="meta-val">{{item.storageCondition}}</text>
+          </view>
+          <view class="meta-row" wx:if="{{item.validPeriod}}">
+            <text class="meta-label">有效期：</text>
+            <text class="meta-val">{{item.validPeriod}}</text>
+          </view>
+          <view class="meta-row">
+            <text class="meta-label">在库状态：</text>
+            <text class="stock-tag {{item.hasStock ? 'in-stock' : 'low-stock'}}">{{item.hasStock ? '现货在库' : '暂无可用库存'}}</text>
+          </view>
+        </view>
+
+        <!-- 限购配额与剩余提示 (赠品配额针对赠品单位，常规限购针对常规单位) -->
+        <view class="quota-badge {{item.units[item.selectedUnitIndex].isQuotaExceeded ? 'quota-exceeded' : ''}}" wx:if="{{item.units[item.selectedUnitIndex].isGift && item.units[item.selectedUnitIndex].quotaLimit > 0}}">
+          <text class="quota-icon">🎁</text>
+          <text wx:if="{{item.units[item.selectedUnitIndex].isQuotaExceeded}}">已达赠品申领上限 (限领 {{item.units[item.selectedUnitIndex].quotaLimit}} {{item.units[item.selectedUnitIndex].quotaUnit}})</text>
+          <text wx:else>🎁 赠品限领 {{item.units[item.selectedUnitIndex].quotaLimit}} {{item.units[item.selectedUnitIndex].quotaUnit}} (本院剩余可用: {{item.units[item.selectedUnitIndex].remainingQuota}} {{item.units[item.selectedUnitIndex].quotaUnit}})</text>
+        </view>
+        <view class="quota-badge {{item.isQuotaExceeded ? 'quota-exceeded' : ''}}" wx:elif="{{item.quotaLimit && item.quotaLimit > 0}}">
+          <text class="quota-icon">⚠️</text>
+          <text wx:if="{{item.isQuotaExceeded}}">已达常规限购上限 (限额 {{item.quotaLimit}} {{item.quotaUnit}})</text>
+          <text wx:else>常规限购 {{item.quotaLimit}} {{item.quotaUnit}} (本院剩余可用: {{item.remainingQuota}} {{item.quotaUnit}})</text>
+        </view>
+
+        <!-- 允许订购单位与协议价格切换 -->
+        <view class="unit-selector">
+          <view class="unit-title">订购单位：</view>
+          <view class="unit-tags">
+            <view class="unit-tag {{item.selectedUnitIndex === uIdx ? 'active' : ''}}"
+                  wx:for="{{item.units}}" wx:for-index="uIdx" wx:for-item="u" wx:key="unitName"
+                  bindtap="selectUnit" data-mid="{{item.id}}" data-uidx="{{uIdx}}">
+              {{u.unitName}} (¥{{u.packageUnitPrice}})
+            </view>
+          </view>
+        </view>
+
+        <!-- 价格规则提示 -->
+        <view class="price-rule-tip" wx:if="{{item.units[item.selectedUnitIndex].ruleDescription}}">
+          <text class="rule-badge">🏷️ {{item.units[item.selectedUnitIndex].ruleDescription}}</text>
+        </view>
+
+        <!-- 底部价格、数量步进与操作 -->
+        <view class="card-foot">
+          <view class="price-display">
+            <text class="currency">¥</text>
+            <text class="price-val">{{item.units[item.selectedUnitIndex].packageUnitPrice}}</text>
+            <text class="price-unit">/ {{item.units[item.selectedUnitIndex].unitName}}</text>
+          </view>
+          <view class="foot-actions">
+            <view class="btn-detail" catchtap="goToDetail" data-id="{{item.id}}">资质</view>
+            <view class="qty-stepper">
+              <view class="stepper-btn {{(item.cartQuantity || 1) <= 1 ? 'disabled' : ''}}"
+                    catchtap="onStepperMinus" data-id="{{item.id}}">-</view>
+              <input class="stepper-input" type="number" value="{{item.cartQuantity || 1}}"
+                     catchtap="preventBubble" bindblur="onStepperBlur" bindconfirm="onStepperBlur" data-id="{{item.id}}" />
+              <view class="stepper-btn {{(item.units[item.selectedUnitIndex].isGift ? item.units[item.selectedUnitIndex].isQuotaExceeded : item.isQuotaExceeded) ? 'disabled' : ''}}"
+                    catchtap="onStepperPlus" data-id="{{item.id}}">+</view>
+            </view>
+            <view class="btn-cart {{(item.units[item.selectedUnitIndex].isGift ? item.units[item.selectedUnitIndex].isQuotaExceeded : item.isQuotaExceeded) ? 'disabled' : ''}}"
+                  catchtap="addToCart" data-item="{{item}}">加清单</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty-tip" wx:if="{{materials.length === 0 && !loading}}">
+        未找到准入耗材商品
+      </view>
+    </view>
+  </view>
+</view>
+
+  <!-- 悬浮购物车栏 -->
+  <view class="floating-cart" wx:if="{{isApproved && cartCount > 0}}" bindtap="goToCart">
+    <view class="cart-left">
+      <view class="cart-badge-wrap">
+        <text class="cart-icon">🛒</text>
+        <text class="cart-badge">{{cartCount}}</text>
+      </view>
+      <text class="cart-hint">已选订购品项</text>
+    </view>
+    <view class="cart-right">
+      <text class="cart-go">去结算 →</text>
+    </view>
+  </view>
+</view>

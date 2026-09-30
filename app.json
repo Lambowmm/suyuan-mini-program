@@ -1,15 +1,54 @@
 {
   "pages": [
-    "pages/report/index",
-    "pages/report/result",
     "pages/index/index",
-    "pages/mine/index"
+    "pages/report/index",
+    "pages/order/index",
+    "pages/mine/index",
+    "pages/order/detail",
+    "pages/order/cart",
+    "pages/order/checkout",
+    "pages/order/list",
+    "pages/report/result",
+    "pages/mine/apply",
+    "pages/mine/settlement"
   ],
   "window": {
     "navigationBarTitleText": "江苏溯源病理",
     "navigationBarBackgroundColor": "#F7FAFC",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#F7FAFC"
+  },
+  "tabBar": {
+    "color": "#8b97a3",
+    "selectedColor": "#1677ff",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/tabbar/home.png",
+        "selectedIconPath": "assets/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/report/index",
+        "text": "报告查询",
+        "iconPath": "assets/tabbar/report.png",
+        "selectedIconPath": "assets/tabbar/report-active.png"
+      },
+      {
+        "pagePath": "pages/order/index",
+        "text": "耗材采购",
+        "iconPath": "assets/tabbar/order.png",
+        "selectedIconPath": "assets/tabbar/order-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "assets/tabbar/mine.png",
+        "selectedIconPath": "assets/tabbar/mine-active.png"
+      }
+    ]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"
