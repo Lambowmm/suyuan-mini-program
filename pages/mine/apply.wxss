@@ -1,0 +1,360 @@
+.apply-page {
+  padding: 30rpx 24rpx;
+  background-color: #f7f9fc;
+  min-height: 100vh;
+}
+
+.pending-banner {
+  background-color: #fffbeb;
+  border: 1rpx solid #fde68a;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: flex-start;
+}
+
+.banner-icon {
+  font-size: 36rpx;
+  margin-right: 16rpx;
+  margin-top: 4rpx;
+}
+
+.banner-content {
+  flex: 1;
+}
+
+.banner-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 6rpx;
+}
+
+.banner-desc {
+  font-size: 24rpx;
+  color: #b45309;
+  line-height: 1.5;
+}
+
+.apply-header {
+  margin-bottom: 24rpx;
+}
+
+.header-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 12rpx;
+}
+
+.header-desc {
+  font-size: 24rpx;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.form-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
+  margin-bottom: 24rpx;
+}
+
+.form-item {
+  margin-bottom: 24rpx;
+}
+
+.form-item:last-child {
+  margin-bottom: 0;
+}
+
+.item-label {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 12rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bound-tag {
+  font-size: 20rpx;
+  color: #059669;
+  background-color: #d1fae5;
+  padding: 2rpx 12rpx;
+  border-radius: 12rpx;
+  font-weight: normal;
+}
+
+.form-tip-tag {
+  font-size: 20rpx;
+  color: #0e7c7b;
+  background-color: #e6f7f6;
+  padding: 2rpx 12rpx;
+  border-radius: 12rpx;
+  font-weight: normal;
+}
+
+.optional-tag {
+  font-size: 20rpx;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 2rpx 12rpx;
+  border-radius: 12rpx;
+  font-weight: normal;
+}
+
+.required {
+  color: #ef4444;
+}
+
+.item-input {
+  background-color: #f9fafb;
+  border: 1rpx solid #e5e7eb;
+  border-radius: 10rpx;
+  height: 80rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: #1f2937;
+}
+
+.input-readonly {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.input-disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+}
+
+.notice-card {
+  background-color: #eff6ff;
+  border: 1rpx solid #bfdbfe;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 40rpx;
+}
+
+.notice-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1e40af;
+  margin-bottom: 12rpx;
+}
+
+.notice-text {
+  font-size: 22rpx;
+  color: #3b82f6;
+  line-height: 1.6;
+  margin-bottom: 6rpx;
+}
+
+.notice-text:last-child {
+  margin-bottom: 0;
+}
+
+.btn-wrap {
+  margin-top: 20rpx;
+}
+
+.submit-btn {
+  background-color: #1677ff;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 40rpx;
+  height: 84rpx;
+  line-height: 84rpx;
+}
+
+.btn-disabled {
+  background-color: #e5e7eb !important;
+  color: #9ca3af !important;
+  border: none;
+}
+
+/* 认证采购资质生效专属样式 */
+.approved-cert-container {
+  padding-bottom: 40rpx;
+}
+
+.cert-status-banner {
+  background: linear-gradient(135deg, #059669, #10b981);
+  border-radius: 16rpx;
+  padding: 24rpx 28rpx;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 14rpx rgba(16, 185, 129, 0.2);
+}
+
+.banner-badge-icon {
+  font-size: 44rpx;
+  margin-right: 20rpx;
+}
+
+.banner-badge-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  margin-bottom: 4rpx;
+}
+
+.banner-badge-desc {
+  font-size: 22rpx;
+  opacity: 0.9;
+}
+
+.cert-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 28rpx 24rpx;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.05);
+  margin-bottom: 24rpx;
+}
+
+.cert-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 18rpx;
+  border-bottom: 1rpx solid #f3f4f6;
+}
+
+.cert-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #111827;
+}
+
+.cert-status-badge {
+  font-size: 22rpx;
+  background-color: #dcfce7;
+  color: #16a34a;
+  padding: 6rpx 18rpx;
+  border-radius: 20rpx;
+  font-weight: 600;
+}
+
+.cert-card-body {
+  padding-top: 20rpx;
+}
+
+.cert-row {
+  display: flex;
+  font-size: 28rpx;
+  margin-bottom: 14rpx;
+  line-height: 1.5;
+}
+
+.cert-label {
+  color: #6b7280;
+  width: 200rpx;
+  flex-shrink: 0;
+}
+
+.cert-val {
+  color: #1f2937;
+  font-weight: 500;
+  flex: 1;
+}
+
+.cert-hospital-name {
+  color: #1677ff;
+  font-weight: 700;
+}
+
+.cert-phone {
+  font-family: monospace;
+}
+
+.cert-auth-note {
+  font-size: 24rpx;
+  color: #6b7280;
+  margin-top: 18rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx dashed #e5e7eb;
+  line-height: 1.6;
+}
+
+.privileges-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 28rpx 24rpx;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.05);
+  margin-bottom: 30rpx;
+}
+
+.privileges-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 20rpx;
+}
+
+.privilege-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.privilege-item:last-child {
+  margin-bottom: 0;
+}
+
+.priv-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+  margin-top: 2rpx;
+}
+
+.priv-content {
+  flex: 1;
+}
+
+.priv-name {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4rpx;
+}
+
+.priv-desc {
+  font-size: 22rpx;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.cert-action-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.primary-action-btn {
+  background-color: #1677ff;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 40rpx;
+  height: 84rpx;
+  line-height: 84rpx;
+  width: 100% !important;
+  box-shadow: 0 4rpx 12rpx rgba(22, 119, 255, 0.25);
+  margin-bottom: 16rpx;
+}
+
+.secondary-action-btn {
+  background-color: #ffffff;
+  color: #1677ff;
+  font-size: 28rpx;
+  font-weight: 500;
+  border-radius: 40rpx;
+  border: 1rpx solid #1677ff;
+  height: 80rpx;
+  line-height: 78rpx;
+  width: 100% !important;
+}

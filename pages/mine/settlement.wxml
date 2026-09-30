@@ -1,0 +1,70 @@
+<view class="settlement-page">
+  <view class="banner">
+    <view class="banner-title">医院月度对账结算中心</view>
+    <view class="banner-desc">按自然月（北京时间）汇总医院所有已确认签收的耗材实收明细，保障医院财务核算与对账合规透明。</view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-wrap" wx:if="{{settlements.length === 0 && !loading}}">
+    <view class="empty-icon">📑</view>
+    <view class="empty-text">暂无已生成的月度结算单</view>
+    <view class="empty-sub">当月签收的出库单将在月末或由财务管理员生成结算单</view>
+  </view>
+
+  <!-- 结算单列表 -->
+  <view class="list-wrap">
+    <view class="settle-card" wx:for="{{settlements}}" wx:key="id">
+      <view class="card-header">
+        <view class="header-left">
+          <text class="month-text">{{item.settlementMonth}} 结算周期</text>
+          <text class="settle-no">单号: {{item.settlementNo}}</text>
+        </view>
+        <view class="header-right">
+          <text class="status-badge status-{{item.status}}">{{item.status === 'CONFIRMED' ? '已确认对账' : '待确认草稿'}}</text>
+        </view>
+      </view>
+
+      <view class="card-body">
+        <view class="stat-col">
+          <text class="stat-label">实收耗材总量</text>
+          <text class="stat-val">{{item.totalBaseQty}} 件</text>
+        </view>
+        <view class="stat-col">
+          <text class="stat-label">对账结算总额</text>
+          <text class="stat-amount">¥{{item.totalAmount}}</text>
+        </view>
+      </view>
+
+      <view class="card-actions">
+        <button class="action-btn export-btn" bindtap="exportExcel" data-id="{{item.id}}">
+          <text class="excel-icon">📄</text> 导出结算明细 (.xlsx)
+        </button>
+        <button class="action-btn toggle-btn" bindtap="toggleDetail" data-id="{{item.id}}">
+          {{expandedId === item.id ? '收起明细' : '查看结算明细'}}
+        </button>
+      </view>
+
+      <!-- 展开的结算单行项目 -->
+      <view class="drawer-panel" wx:if="{{expandedId === item.id}}">
+        <view class="drawer-title">对账明细列表 ({{item.items ? item.items.length : 0}}项)</view>
+
+        <view class="detail-list" wx:if="{{item.items && item.items.length > 0}}">
+          <view class="detail-row" wx:for="{{item.items}}" wx:for-item="sub" wx:key="id">
+            <view class="detail-top">
+              <text class="mat-name">{{sub.materialName}} ({{sub.materialCode}})</text>
+              <text class="mat-amt">¥{{sub.postedAmount}}</text>
+            </view>
+            <view class="detail-mid">
+              <text>规格: {{sub.spec || '-'}} | 实收基本数: {{sub.dispatchedBaseQty}} {{sub.baseUnit}}</text>
+            </view>
+            <view class="detail-bot">
+              <text class="doc-link">订单: {{sub.orderNo}}</text>
+              <text class="doc-link">配送: {{sub.shipmentNo}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="detail-empty" wx:elif="{{item.items}}">暂无结算耗材行</view>
+      </view>
+    </view>
+  </view>
+</view>

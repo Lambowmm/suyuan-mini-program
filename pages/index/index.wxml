@@ -1,5 +1,33 @@
-<view class="page-root blank-page">
-  <view class="blank-mark"></view>
-  <view class="blank-title">首页</view>
-  <view class="blank-subtitle">功能暂留</view>
+<view class="home-container">
+  <view class="home-header">
+    <view class="home-logo-wrap">
+      <view class="home-logo"></view>
+    </view>
+    <view class="home-title">江苏溯源智慧医检</view>
+    <view class="home-subtitle">病理检验查询与医院耗材集采服务平台</view>
+  </view>
+
+  <view class="home-actions">
+    <view class="action-card report-card" bindtap="goToReport">
+      <view class="card-icon report-icon"></view>
+      <view class="card-body">
+        <view class="card-title">报告查询</view>
+        <view class="card-desc">病理诊断报告与 LIS 检验报告查询</view>
+      </view>
+      <view class="card-arrow"></view>
+    </view>
+
+    <view class="action-card order-card" bindtap="goToOrder">
+      <view class="card-icon order-icon"></view>
+      <view class="card-body">
+        <view class="card-title">耗材采购</view>
+        <view class="card-desc">准入耗材目录、合同定价、选购下单与配送收货</view>
+      </view>
+      <view class="card-arrow"></view>
+    </view>
+  </view>
+
+  <view class="home-footer">
+    <view class="footer-tip">江苏溯源病理诊断中心有限责任公司 ©</view>
+  </view>
 </view>

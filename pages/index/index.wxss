@@ -1,29 +1,119 @@
-.blank-page {
-  display: flex;
+.home-container {
   min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  box-sizing: border-box;
+  padding: 40rpx 32rpx;
   background: #f7fafc;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.blank-mark {
-  width: 72rpx;
-  height: 72rpx;
+.home-header {
+  text-align: center;
+  padding: 60rpx 0 40rpx;
+}
+
+.home-logo-wrap {
+  display: flex;
+  justify-content: center;
   margin-bottom: 24rpx;
-  border: 16rpx solid #dcefed;
-  border-top-color: #0e7c7b;
-  border-radius: 50%;
 }
 
-.blank-title {
-  font-size: 36rpx;
-  font-weight: 700;
-  color: #17212b;
+.home-logo {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #0e7c7b 0%, #17a2b8 100%);
+  box-shadow: 0 12rpx 32rpx rgba(14, 124, 123, 0.25);
 }
 
-.blank-subtitle {
+.home-title {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #1a202c;
+  letter-spacing: 2rpx;
+}
+
+.home-subtitle {
   margin-top: 12rpx;
   font-size: 26rpx;
-  color: #8b97a3;
+  color: #718096;
+}
+
+.home-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+  margin: 20rpx 0 60rpx;
+}
+
+.action-card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 36rpx 32rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.05);
+  border: 1rpx solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.action-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.04);
+}
+
+.card-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 18rpx;
+  margin-right: 28rpx;
+  flex-shrink: 0;
+}
+
+.report-icon {
+  background: #e8f5f4;
+  border: 2rpx solid #bfe0de;
+}
+
+.order-icon {
+  background: #e6f7ff;
+  border: 2rpx solid #bae7ff;
+}
+
+.card-body {
+  flex: 1;
+}
+
+.card-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.card-desc {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #718096;
+  line-height: 1.4;
+}
+
+.card-arrow {
+  width: 16rpx;
+  height: 16rpx;
+  border-top: 4rpx solid #cbd5e0;
+  border-right: 4rpx solid #cbd5e0;
+  transform: rotate(45deg);
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.home-footer {
+  text-align: center;
+  padding-bottom: 24rpx;
+}
+
+.footer-tip {
+  font-size: 22rpx;
+  color: #a0aec0;
 }

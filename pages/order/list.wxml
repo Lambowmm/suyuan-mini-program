@@ -1,0 +1,140 @@
+<view class="order-list-page">
+  <!-- 状态筛选 Tab (标准下划线滑动标签栏) -->
+  <scroll-view class="tab-scroll" scroll-x show-scrollbar="false">
+    <view class="tab-item {{currentStatus === item.status ? 'active' : ''}}"
+          wx:for="{{statusTabs}}" wx:key="status"
+          bindtap="onTabChange" data-status="{{item.status}}">
+      <text class="tab-text">{{item.label}}</text>
+      <view class="tab-line" wx:if="{{currentStatus === item.status}}"></view>
+    </view>
+  </scroll-view>
+
+  <!-- 导出采购订单明细工具栏 -->
+  <view class="export-strip" wx:if="{{orders.length > 0}}">
+    <text class="export-count-tip">共 {{orders.length}} 笔采购订单</text>
+    <view class="export-action-link" bindtap="exportOrdersExcel">
+      <text class="export-action-icon">📊</text>
+      <text>导出明细 (.xlsx)</text>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-wrap" wx:if="{{orders.length === 0 && !loading}}">
+    <view class="empty-icon">📋</view>
+    <view class="empty-text">暂无相关采购订单</view>
+    <button class="empty-btn" bindtap="goToCatalog">前往选购耗材</button>
+  </view>
+
+  <!-- 订单列表 -->
+  <view class="orders-wrap">
+    <view class="order-card" wx:for="{{orders}}" wx:key="id">
+      <view class="order-header">
+        <view class="order-no">单号: {{item.orderNo}}</view>
+        <view class="order-status-badge status-{{item.orderStatus}}">
+          {{item.orderStatusDesc}}
+        </view>
+      </view>
+
+      <view class="order-meta">
+        <text class="meta-time">下单时间: {{item.submittedAt}}</text>
+        <text class="meta-purchaser">采购员: {{item.purchaserName}}</text>
+      </view>
+
+      <view class="order-body">
+        <view class="order-stat">
+          <text class="stat-label">耗材项数:</text>
+          <text class="stat-val">{{item.itemCount}} 种</text>
+        </view>
+        <view class="order-stat">
+          <text class="stat-label">出库发货:</text>
+          <text class="stat-val">{{item.shipmentCount}} 批次</text>
+        </view>
+        <view class="order-stat">
+          <text class="stat-label">订单总额:</text>
+          <text class="stat-price">¥{{item.totalAmount}}</text>
+        </view>
+      </view>
+
+      <!-- 展开详情抽屉 -->
+      <view class="drawer-trigger" bindtap="toggleExpand" data-id="{{item.id}}">
+        <text>{{expandedId === item.id ? '收起详情明细' : '查看耗材与配送批次明细'}}</text>
+        <text class="arrow">{{expandedId === item.id ? '▲' : '▼'}}</text>
+      </view>
+
+      <!-- 展开的耗材与发货明细 -->
+      <view class="drawer-content" wx:if="{{expandedId === item.id}}">
+        <view class="drawer-section" wx:if="{{item.detail && item.detail.items}}">
+          <view class="section-title">订购耗材项</view>
+          <view class="detail-item" wx:for="{{item.detail.items}}" wx:for-item="sub" wx:key="id">
+            <view class="sub-name">{{sub.materialName}} ({{sub.materialCode}})</view>
+            <view class="sub-qty-line">
+              <text>订购: {{sub.orderQty}} {{sub.orderUnit}} (¥{{sub.packageUnitPrice}}/{{sub.orderUnit}})</text>
+              <text class="sub-line-price">¥{{sub.lineAmount}}</text>
+            </view>
+            <view class="sub-progress">
+              已出库基本数量: {{sub.dispatchedBaseQty}} / {{sub.baseQty}} {{sub.baseUnit}}
+              <text wx:if="{{sub.closedBaseQty > 0}}" class="closed-tag">(已结平: {{sub.closedBaseQty}})</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 配送与收货明细 -->
+        <view class="drawer-section" wx:if="{{item.detail && item.detail.shipments && item.detail.shipments.length > 0}}">
+          <view class="section-title">出库配送批次 ({{item.detail.shipments.length}})</view>
+          <view class="shipment-card" wx:for="{{item.detail.shipments}}" wx:for-item="smp" wx:key="id">
+            <view class="shipment-header">
+              <text class="shipment-no">{{smp.shipmentNo}}</text>
+              <text class="smp-status status-{{smp.deliveryStatus}}">{{smp.deliveryStatusDesc}}</text>
+            </view>
+            <view class="shipment-meta">
+              <text>配送员: {{smp.assignedToName || '待指派'}}</text>
+              <text wx:if="{{smp.deliveredAt}}"> | 送达: {{smp.deliveredAt}}</text>
+            </view>
+
+            <!-- 签收状态与手动确认按钮 -->
+            <view class="receipt-row">
+              <view class="receipt-status-text">
+                <text class="receipt-badge {{smp.receiptStatus === 'CONFIRMED' ? 'confirmed' : 'pending'}}">{{smp.receiptStatusDesc}}</text>
+                <text class="receipt-time" wx:if="{{smp.receiptConfirmedAt}}">({{smp.receiptConfirmedAt}})</text>
+              </view>
+
+              <button class="confirm-receipt-btn"
+                      wx:if="{{smp.receiptStatus !== 'CONFIRMED'}}"
+                      bindtap="confirmReceipt" data-shipment-id="{{smp.id}}">
+                确认收货
+              </button>
+            </view>
+          </view>
+        </view>
+
+        <view class="drawer-section" wx:elif="{{item.detail}}">
+          <view class="shipment-none">暂未生成出库配送单，等待仓库配货</view>
+        </view>
+      </view>
+
+      <!-- 订单底部操作栏 -->
+      <view class="order-footer">
+        <view class="footer-left">
+          <text class="dispatched-hint" wx:if="{{item.dispatchedAmount > 0}}">已发货金额: ¥{{item.dispatchedAmount}}</text>
+        </view>
+        <view class="footer-right">
+          <button class="action-btn all-receipt-btn"
+                  wx:if="{{(item.orderStatus === 'ALL_DISPATCHED' || item.orderStatus === 'DISPATCHED') && item.hasUnreceived}}"
+                  catchtap="confirmAllReceipt" data-id="{{item.id}}">
+            全部收货
+          </button>
+          <button class="action-btn cancel-btn"
+                  wx:if="{{item.orderStatus === 'SUBMITTED'}}"
+                  bindtap="cancelOrder" data-id="{{item.id}}">
+            取消订单
+          </button>
+          <button class="action-btn delete-btn"
+                  wx:if="{{item.orderStatus === 'CANCELLED'}}"
+                  catchtap="deleteCancelledOrder" data-id="{{item.id}}" data-order-no="{{item.orderNo}}">
+            删除订单
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

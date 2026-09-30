@@ -1,0 +1,240 @@
+.settlement-page {
+  padding-bottom: 60rpx;
+  background-color: #f7f9fc;
+  min-height: 100vh;
+}
+
+.banner {
+  background: linear-gradient(135deg, #107c41, #0c5e31);
+  padding: 36rpx 28rpx;
+  color: #ffffff;
+}
+
+.banner-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  margin-bottom: 10rpx;
+}
+
+.banner-desc {
+  font-size: 24rpx;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 40rpx;
+}
+
+.empty-icon {
+  font-size: 88rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.empty-sub {
+  font-size: 24rpx;
+  color: #9ca3af;
+  margin-top: 10rpx;
+  text-align: center;
+}
+
+.list-wrap {
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.settle-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #f3f4f6;
+}
+
+.month-text {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1f2937;
+  display: block;
+}
+
+.settle-no {
+  font-size: 22rpx;
+  color: #9ca3af;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.status-badge {
+  font-size: 22rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+}
+
+.status-DRAFT {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.status-CONFIRMED {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.card-body {
+  display: flex;
+  justify-content: space-around;
+  background-color: #f9fafb;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  margin: 20rpx 0;
+}
+
+.stat-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #6b7280;
+}
+
+.stat-val {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 6rpx;
+}
+
+.stat-amount {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #ef4444;
+  margin-top: 6rpx;
+}
+
+.card-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.action-btn {
+  flex: 1;
+  font-size: 24rpx;
+  height: 64rpx;
+  line-height: 62rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.export-btn {
+  background-color: #ffffff;
+  color: #107c41;
+  border: 1rpx solid #107c41;
+}
+
+.excel-icon {
+  margin-right: 6rpx;
+  font-size: 26rpx;
+}
+
+.toggle-btn {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1rpx solid #e5e7eb;
+}
+
+.drawer-panel {
+  margin-top: 20rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx dashed #e5e7eb;
+}
+
+.drawer-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 12rpx;
+}
+
+.detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.detail-row {
+  background-color: #f9fafb;
+  border: 1rpx solid #eeeeee;
+  border-radius: 8rpx;
+  padding: 14rpx;
+}
+
+.detail-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mat-name {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.mat-amt {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.detail-mid {
+  font-size: 22rpx;
+  color: #6b7280;
+  margin-top: 4rpx;
+}
+
+.detail-bot {
+  display: flex;
+  gap: 20rpx;
+  font-size: 20rpx;
+  color: #9ca3af;
+  margin-top: 6rpx;
+}
+
+.doc-link {
+  background-color: #e5e7eb;
+  padding: 2rpx 8rpx;
+  border-radius: 4rpx;
+}
+
+.detail-empty {
+  font-size: 24rpx;
+  color: #9ca3af;
+  text-align: center;
+  padding: 16rpx 0;
+}

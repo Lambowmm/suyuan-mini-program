@@ -1,0 +1,160 @@
+<view class="apply-page">
+  <!-- 认证通过状态：展示完整的资质认证卡片及专属采购权益 -->
+  <view class="approved-cert-container" wx:if="{{isApproved}}">
+    <view class="cert-status-banner">
+      <view class="banner-badge-icon">🛡️</view>
+      <view class="banner-badge-info">
+        <view class="banner-badge-title">耗材采购资质已认证生效</view>
+        <view class="banner-badge-desc">已通过医疗耗材采购准入合规审核并与医院档案绑定</view>
+      </view>
+    </view>
+
+    <!-- 医院耗材采购准入资质卡片 (完整收录卡片内容) -->
+    <view class="cert-card">
+      <view class="cert-card-header">
+        <view class="cert-title">医院耗材采购准入资质</view>
+        <view class="cert-status-badge">认证采购</view>
+      </view>
+
+      <view class="cert-card-body">
+        <view class="cert-row">
+          <text class="cert-label">准入合作医院：</text>
+          <text class="cert-val cert-hospital-name">{{user.customerName || hospitalName}}</text>
+        </view>
+        <view class="cert-row">
+          <text class="cert-label">认证采购员：</text>
+          <text class="cert-val">{{user.realName}} ({{user.department || '耗材采购'}})</text>
+        </view>
+        <view class="cert-row">
+          <text class="cert-label">绑定手机号：</text>
+          <text class="cert-val cert-phone">{{user.phone}}</text>
+        </view>
+        <view class="cert-auth-note">
+          您已获得医院授权，可在线查阅准入耗材目录、下达订购单并核对月度结算账单。
+        </view>
+      </view>
+    </view>
+
+    <!-- 专享采购权益说明 -->
+    <view class="privileges-card">
+      <view class="privileges-title">已开通采购权益</view>
+      <view class="privilege-item">
+        <view class="priv-icon">🏷️</view>
+        <view class="priv-content">
+          <view class="priv-name">专享协议底价</view>
+          <view class="priv-desc">针对该医院配置的专属耗材目录与协议定价已全量生效。</view>
+        </view>
+      </view>
+      <view class="privilege-item">
+        <view class="priv-icon">📦</view>
+        <view class="priv-content">
+          <view class="priv-name">在线极速订购</view>
+          <view class="priv-desc">支持全品类耗材加购、包装规格换算与限购自动核验。</view>
+        </view>
+      </view>
+      <view class="privilege-item">
+        <view class="priv-icon">🚚</view>
+        <view class="priv-content">
+          <view class="priv-name">分批物流跟踪</view>
+          <view class="priv-desc">支持拆批配送与物流进度追踪，7天未确认自动签收。</view>
+        </view>
+      </view>
+      <view class="privilege-item">
+        <view class="priv-icon">📑</view>
+        <view class="priv-content">
+          <view class="priv-name">月度对账结算</view>
+          <view class="priv-desc">按自然月自动汇总形成医院月度对账单，便于财务统一核算。</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷操作按钮 -->
+    <view class="btn-wrap cert-action-wrap">
+      <button class="primary-action-btn" bindtap="goToOrderIndex">前往耗材选购 (去采购)</button>
+      <button class="secondary-action-btn" bindtap="goToOrderList">查看我的采购订单</button>
+    </view>
+  </view>
+
+  <!-- 未认证 / 审核中 / 驳回状态 表单 -->
+  <view class="apply-form-container" wx:else>
+    <!-- 审核中状态提示条 -->
+    <view class="pending-banner" wx:if="{{isPending}}">
+      <text class="banner-icon">⏳</text>
+      <view class="banner-content">
+        <view class="banner-title">准入申请审核中</view>
+        <view class="banner-desc">您已提交采购准入申请，正在由后台管理员审核，无需重复提交。</view>
+      </view>
+    </view>
+
+    <view class="apply-header">
+      <view class="header-title">医院耗材采购员准入认证申请</view>
+      <view class="header-desc">为符合医疗机构耗材采购合规监管要求，请提交您所在的合作医院与真实身份信息。后台管理员审核通过后，您将获得该医院的耗材目录与协议价格采购权限。</view>
+    </view>
+
+    <view class="form-card">
+      <view class="form-item">
+        <view class="item-label">
+          <text>合作医院名称 <text class="required">*</text></text>
+          <text class="form-tip-tag">至少4个字</text>
+        </view>
+        <input class="item-input {{isPending ? 'input-disabled' : ''}}"
+               placeholder="请输入合作医院全称 (至少4个字)"
+               value="{{hospitalName}}"
+               disabled="{{isPending}}"
+               bindinput="onInputHospital" />
+      </view>
+
+      <view class="form-item">
+        <view class="item-label">
+          <text>真实姓名 <text class="required">*</text></text>
+          <text class="form-tip-tag">2-4个汉字</text>
+        </view>
+        <input class="item-input {{isPending ? 'input-disabled' : ''}}"
+               placeholder="请输入真实姓名 (2-4个汉字)"
+               maxlength="4"
+               value="{{realName}}"
+               disabled="{{isPending}}"
+               bindinput="onInputRealName" />
+      </view>
+
+      <view class="form-item">
+        <view class="item-label">
+          <text>所在科室</text>
+          <text class="optional-tag">选填</text>
+        </view>
+        <input class="item-input {{isPending ? 'input-disabled' : ''}}"
+               placeholder="如: 检验科 / 病理科 / 耗材采购部 (选填)"
+               value="{{department}}"
+               disabled="{{isPending}}"
+               bindinput="onInputDepartment" />
+      </view>
+
+      <view class="form-item">
+        <view class="item-label">
+          <text>联系电话 <text class="required">*</text></text>
+          <text class="bound-tag">默认为绑定手机号</text>
+        </view>
+        <input class="item-input input-readonly"
+               value="{{phone}}"
+               disabled="true"
+               placeholder="自动读取已绑定手机号" />
+      </view>
+    </view>
+
+    <view class="notice-card">
+      <view class="notice-title">ℹ️ 准入认证说明</view>
+      <view class="notice-text">1. 提交后系统将通知后台管理员核验资质及客户合作档案；</view>
+      <view class="notice-text">2. 审核通过后，即可使用专属协议价格在线下达病理/检验耗材订单；</view>
+      <view class="notice-text">3. 订单配送后自动汇总至该医院的自然月结算单，便于科室核算与财务对账。</view>
+    </view>
+
+    <view class="btn-wrap">
+      <button class="submit-btn {{isPending ? 'btn-disabled' : ''}}"
+              loading="{{submitting}}"
+              disabled="{{submitting || isPending}}"
+              bindtap="submitApply">
+        {{isPending ? '申请审核中 (无需重复提交)' : '提交准入申请'}}
+      </button>
+    </view>
+  </view>
+</view>
